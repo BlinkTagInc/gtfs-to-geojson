@@ -1,0 +1,52 @@
+{
+  "name": "gtfs-to-geojson",
+  "description": "Generate geoJSON of a transit route from a GTFS file",
+  "version": "0.0.1",
+  "keywords": [
+    "transit",
+    "gtfs",
+    "transportation",
+    "geojson"
+  ],
+  "private": false,
+  "author": "Brendan Nee <me@bn.ee>",
+  "contributors": [
+  ],
+  "repository": "git://github.com/brendannee/gtfs-to-geojson",
+  "bugs": {
+    "url": "https://github.com/brendannee/gtfs-to-geojson/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "xo"
+  },
+  "bin": {
+    "gtfs-to-geojson": "bin/gtfs-to-geojson.js"
+  },
+  "main": "index",
+  "dependencies": {
+    "archiver": "1.3.0",
+    "async": "2.1.5",
+    "cli-table": "0.3.1",
+    "gtfs": "0.9.5",
+    "lodash": "4.17.4",
+    "mkdirp-promise": "5.0.1",
+    "rimraf": "2.6.1",
+    "sanitize-filename": "1.6.1",
+    "timer-machine": "1.1.0",
+    "yargs": "7.0.2"
+  },
+  "devDependencies": {
+    "xo": "0.18.0"
+  },
+  "peerDependencies": {
+    "mongoose": ">= 4.8.4"
+  },
+  "engines": {
+    "node": ">= 6.9.0"
+  },
+  "xo": {
+    "esnext": true,
+    "space": true
+  }
+}
