@@ -6,12 +6,5 @@
       "url": "https://transitfeeds.com/p/bart/58/latest/download"
     }
   ],
-  "effectiveDate": "July 8, 2016",
-  "noServiceSymbol": "—",
-  "requestStopSymbol": "***",
-  "showMap": true,
-  "showOnlyTimepoint": true,
-  "showStopCity": false,
-  "mapboxAccessToken": "YOUR MAPBOX ACCESS TOKEN'",
   "zipOutput": false
 }
