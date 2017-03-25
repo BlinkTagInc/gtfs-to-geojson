@@ -1,7 +1,7 @@
 # GTFS to GeoJSON
 
 [![NPM version](https://img.shields.io/npm/v/gtfs-to-geojson.svg?style=flat)](https://www.npmjs.com/package/gtfs-to-geojson)
-[![David](https://img.shields.io/david/brendannee/gtfs-to-geojson.svg)]()
+[![David](https://img.shields.io/david/blinktaginc/gtfs-to-geojson.svg)]()
 [![npm](https://img.shields.io/npm/dm/gtfs-to-geojson.svg?style=flat)]()
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
@@ -9,7 +9,7 @@
 
 `gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON.
 
-`gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/brendannee/node-gtfs) library to handle importing and querying GTFS data.
+`gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data.
 
 ## Installation
 
@@ -188,7 +188,7 @@ By default, node has a memory limit of 512 MB or 1 GB. If you have a very large 
 
 ## Contributing
 
-Pull requests are welcome, as is feedback and [reporting issues](https://github.com/brendannee/gtfs-to-geojson/issues).
+Pull requests are welcome, as is feedback and [reporting issues](https://github.com/blinktaginc/gtfs-to-geojson/issues).
 
 ### Tests
 
