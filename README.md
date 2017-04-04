@@ -47,6 +47,7 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
 | [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
 | [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
+| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency", "route" and "direction". |
 | [`zipOutput`](#zipoutput) | boolean | Whether or not to zip the output into one zip file. |
 
 ### agencies
@@ -147,6 +148,14 @@ API along with your API token.
 
 ```
     "verbose": false
+```
+
+### outputType
+
+{String} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route. Choose "direction" to output one geoJSON file per route, per direction. Defaults to `route`.
+
+```
+    "outputType": "route"
 ```
 
 ### zipOutput

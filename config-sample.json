@@ -6,5 +6,6 @@
       "url": "https://transitfeeds.com/p/bart/58/latest/download"
     }
   ],
+  "outputType": "route",
   "zipOutput": false
 }
