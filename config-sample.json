@@ -7,5 +7,6 @@
     }
   ],
   "outputType": "route",
+  "coordinatePrecision": 5,
   "zipOutput": false
 }
