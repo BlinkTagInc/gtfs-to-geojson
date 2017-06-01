@@ -45,6 +45,7 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | option | type | description |
 | ------ | ---- | ----------- |
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
+| [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. |
 | [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
 | [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
 | [`outputType`](#outputType) | string | The grouping of the output. Options are "agency", "route" and "direction". |
@@ -140,6 +141,14 @@ API along with your API token.
     }
   ]
 }
+```
+
+### includeStops
+
+{Boolean} Whether or not to include stops in the geoJSON. Defaults to `true`.
+
+```
+    "includeStops": true
 ```
 
 ### verbose

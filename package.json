@@ -1,7 +1,7 @@
 {
   "name": "gtfs-to-geojson",
   "description": "Generate geoJSON of a transit route from a GTFS file",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "keywords": [
     "transit",
     "gtfs",
@@ -24,10 +24,11 @@
   },
   "main": "index",
   "dependencies": {
+    "@mapbox/geojson-merge": "1.0.2",
     "archiver": "1.3.0",
     "async": "2.4.1",
     "cli-table": "0.3.1",
-    "gtfs": "0.9.12",
+    "gtfs": "0.9.13",
     "lodash": "4.17.4",
     "mkdirp-promise": "5.0.1",
     "rimraf": "2.6.1",
