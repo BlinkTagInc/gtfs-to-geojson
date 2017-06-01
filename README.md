@@ -196,6 +196,12 @@ This will download the GTFS file specified in `config.js` .  Then, `gtfs-to-geoj
 
     gtfs-to-geojson --configPath /path/to/your/custom-config.json
 
+`skipImport`
+
+Skips importing GTFS into MongoDB. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported, you'll get an error.
+
+    gtfs-to-geojson --skipImport
+
 
 ## Processing very large GTFS files.
 

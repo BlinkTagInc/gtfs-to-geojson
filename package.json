@@ -30,7 +30,6 @@
     "gtfs": "0.9.12",
     "lodash": "4.17.4",
     "mkdirp-promise": "5.0.1",
-    "mongoose": "^4.10.4",
     "rimraf": "2.6.1",
     "sanitize-filename": "1.6.1",
     "timer-machine": "1.1.0",

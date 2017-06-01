@@ -14,6 +14,11 @@ const argv = require('yargs')
       default: './config.json',
       type: 'string'
     })
+    .option('s', {
+      alias: 'skipImport',
+      describe: 'Don\'t import GTFS file.',
+      type: 'boolean'
+    })
     .argv;
 
 const gtfsToGeoJSON = require('../');
