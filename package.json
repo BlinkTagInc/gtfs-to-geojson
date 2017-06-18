@@ -38,9 +38,6 @@
   "devDependencies": {
     "xo": "0.18.2"
   },
-  "peerDependencies": {
-    "mongoose": ">= 4.10.4"
-  },
   "engines": {
     "node": ">= 6.9.0"
   },
