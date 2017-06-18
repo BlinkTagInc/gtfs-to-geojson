@@ -53,12 +53,10 @@ getConfig((err, config) => {
   mongoose.Promise = global.Promise;
   mongoose.connect(config.mongoUrl);
 
-  gtfsToGeoJSON(config, err => {
-    if (err) {
-      handleError(err);
-    }
-
+  gtfsToGeoJSON(config)
+  .then(() => {
     console.log('Completed generating geoJSON');
     process.exit();
-  });
+  })
+  .catch(handleError);
 });

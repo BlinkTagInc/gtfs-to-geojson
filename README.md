@@ -30,10 +30,12 @@ Install `gtfs-to-geojson` directly from [npm](https://npmjs.org):
     mongoose.Promise = global.Promise;
     mongoose.connect(config.mongoUrl);
 
-    gtfsToGeoJSON(config, (err) => {
-      if (err) return console.error(err);
-
-      console.log('GeoJSON Generation Successful')
+    gtfsToGeoJSON(config)
+    .then(() => {
+      console.log('GeoJSON Generation Successful');
+    })
+    .catch(err => {
+      console.error(err);
     });
 
 ## Configuration
