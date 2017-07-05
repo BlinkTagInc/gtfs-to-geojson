@@ -23,6 +23,9 @@ const argv = require('yargs')
 
 const gtfsToGeoJSON = require('../');
 
+let config;
+let log;
+
 function handleError(err) {
   console.error(err || 'Unknown Error');
   process.exit(1);
@@ -31,19 +34,23 @@ function handleError(err) {
 // Read config JSON file and merge confiruration file with command-line arguments
 fs.readFile(resolve(argv.configPath), 'utf8')
 .then(data => JSON.parse(data))
-.then(config => _.merge(config, argv))
+.then(json => {
+  config = _.merge(json, argv);
+  log = (config.verbose === false) ? _.noop : console.log;
+})
 .catch(err => {
   console.error(new Error(`Cannot find configuration file at \`${argv.configPath}\`. Use config-sample.json as a starting point, pass --configPath option`));
   handleError(err);
 })
-.then(config => {
+.then(() => {
+  log('Starting gtfs-to-geojson');
   mongoose.Promise = global.Promise;
   mongoose.connect(config.mongoUrl, {useMongoClient: true});
 
   return gtfsToGeoJSON(config);
 })
 .then(() => {
-  console.log('Completed generating geoJSON');
+  log('Completed gtfs-to-geojson');
   process.exit();
 })
 .catch(handleError);
