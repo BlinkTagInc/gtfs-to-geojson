@@ -50,7 +50,7 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. |
 | [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
 | [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
-| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency", "route" and "direction". |
+| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency" and "route". |
 | [`zipOutput`](#zipoutput) | boolean | Whether or not to zip the output into one zip file. |
 
 ### agencies
@@ -163,7 +163,7 @@ API along with your API token.
 
 ### outputType
 
-{String} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route. Choose "direction" to output one geoJSON file per route, per direction. Defaults to `route`.
+{String} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route and direction. Defaults to `route`.
 
 ```
     "outputType": "route"
