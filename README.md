@@ -47,6 +47,7 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | option | type | description |
 | ------ | ---- | ----------- |
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
+| [`coordinatePrecision`](#coordinatePrecision) | integer | An array of GTFS files to be imported. |
 | [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. |
 | [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
 | [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
@@ -129,6 +130,14 @@ API along with your API token.
 }
 ```
 
+### coordinatePrecision
+
+{Integer} The number of decimal places to include in the latitude and longitude of coordinates. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
+
+```
+    "coordinatePrecision": 5
+```
+
 ### mongoUrl
 
 {String} The MongoDB URI use. When running locally, you may want to use `mongodb://localhost:27017/gtfs`.
@@ -167,14 +176,6 @@ API along with your API token.
 
 ```
     "outputType": "route"
-```
-
-### coordinatePrecision
-
-{Integer} The number of decimal places to include in the latitude and longitude of coordinates. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
-
-```
-    "coordinatePrecision": 5
 ```
 
 ### zipOutput
