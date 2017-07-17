@@ -15,7 +15,7 @@
 
 Install `gtfs-to-geojson` directly from [npm](https://npmjs.org):
 
-    npm install mongoose gtfs-to-geojson -g
+    npm install gtfs-to-geojson -g
 
 ## Command-line example
 
