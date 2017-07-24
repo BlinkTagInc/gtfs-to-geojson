@@ -1,7 +1,7 @@
 {
   "name": "gtfs-to-geojson",
   "description": "Generate geoJSON of transit route data from a GTFS file",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "keywords": [
     "transit",
     "gtfs",

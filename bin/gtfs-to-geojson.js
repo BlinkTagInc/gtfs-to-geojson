@@ -19,9 +19,11 @@ const argv = require('yargs')
       describe: 'Don\'t import GTFS file.',
       type: 'boolean'
     })
+    .default('skipImport', undefined)
     .argv;
 
 const gtfsToGeoJSON = require('../');
+const utils = require('../lib/utils');
 
 function handleError(err) {
   console.error(err || 'Unknown Error');
@@ -30,7 +32,13 @@ function handleError(err) {
 
 const getConfig = async () => {
   const data = await fs.readFile(resolve(argv.configPath), 'utf8');
-  return _.merge(JSON.parse(data), argv);
+  const config = JSON.parse(data);
+
+  if (argv.skipImport === true) {
+    config.skipImport = argv.skipImport;
+  }
+
+  return utils.setDefaultConfig(config);
 };
 
 getConfig()
