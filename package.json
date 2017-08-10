@@ -1,7 +1,7 @@
 {
   "name": "gtfs-to-geojson",
   "description": "Generate geoJSON of transit route data from a GTFS file",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "keywords": [
     "transit",
     "gtfs",
@@ -24,17 +24,16 @@
   },
   "main": "index",
   "dependencies": {
-    "@mapbox/geojson-merge": "1.0.2",
-    "archiver": "2.0.0",
-    "bluebird": "^3.5.0",
-    "cli-table": "0.3.1",
-    "fs-extra": "^4.0.0",
-    "gtfs": "1.0.0",
-    "lodash": "4.17.4",
-    "mongoose": "4.10.8",
-    "sanitize-filename": "1.6.1",
-    "timer-machine": "1.1.0",
-    "yargs": "8.0.2"
+    "@mapbox/geojson-merge": "^1.0.2",
+    "archiver": "^2.0.0",
+    "cli-table": "^0.3.1",
+    "fs-extra": "^4.0.1",
+    "gtfs": "1.0.1",
+    "lodash": "^4.17.4",
+    "mongoose": "4.11.6",
+    "sanitize-filename": "^1.6.1",
+    "timer-machine": "^1.1.0",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "xo": "0.18.2"
