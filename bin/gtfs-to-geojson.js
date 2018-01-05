@@ -51,7 +51,7 @@ getConfig()
 
   log('Starting gtfs-to-geojson');
   mongoose.Promise = global.Promise;
-  mongoose.connect(config.mongoUrl, {useMongoClient: true});
+  mongoose.connect(config.mongoUrl);
 
   await gtfsToGeoJSON(config);
 
