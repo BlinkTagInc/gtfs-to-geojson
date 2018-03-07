@@ -6,21 +6,21 @@ const _ = require('lodash');
 const fs = require('fs-extra');
 const mongoose = require('mongoose');
 const argv = require('yargs')
-    .usage('Usage: $0 --config ./config.json')
-    .help()
-    .option('c', {
-      alias: 'configPath',
-      describe: 'Path to config file',
-      default: './config.json',
-      type: 'string'
-    })
-    .option('s', {
-      alias: 'skipImport',
-      describe: 'Don\'t import GTFS file.',
-      type: 'boolean'
-    })
-    .default('skipImport', undefined)
-    .argv;
+  .usage('Usage: $0 --config ./config.json')
+  .help()
+  .option('c', {
+    alias: 'configPath',
+    describe: 'Path to config file',
+    default: './config.json',
+    type: 'string'
+  })
+  .option('s', {
+    alias: 'skipImport',
+    describe: 'Don\'t import GTFS file.',
+    type: 'boolean'
+  })
+  .default('skipImport', undefined)
+  .argv;
 
 const gtfsToGeoJSON = require('../');
 const utils = require('../lib/utils');
@@ -42,20 +42,20 @@ const getConfig = async () => {
 };
 
 getConfig()
-.catch(err => {
-  console.error(new Error(`Cannot find configuration file at \`${argv.configPath}\`. Use config-sample.json as a starting point, pass --configPath option`));
-  handleError(err);
-})
-.then(async config => {
-  const log = (config.verbose === false) ? _.noop : console.log;
+  .catch(err => {
+    console.error(new Error(`Cannot find configuration file at \`${argv.configPath}\`. Use config-sample.json as a starting point, pass --configPath option`));
+    handleError(err);
+  })
+  .then(async config => {
+    const log = (config.verbose === false) ? _.noop : console.log;
 
-  log('Starting gtfs-to-geojson');
-  mongoose.Promise = global.Promise;
-  mongoose.connect(config.mongoUrl);
+    log('Starting gtfs-to-geojson');
+    mongoose.Promise = global.Promise;
+    mongoose.connect(config.mongoUrl);
 
-  await gtfsToGeoJSON(config);
+    await gtfsToGeoJSON(config);
 
-  log('Completed gtfs-to-geojson');
-  process.exit();
-})
-.catch(handleError);
+    log('Completed gtfs-to-geojson');
+    process.exit();
+  })
+  .catch(handleError);
