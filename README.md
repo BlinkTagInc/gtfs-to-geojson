@@ -7,15 +7,24 @@
 
 [![NPM](https://nodei.co/npm/gtfs-to-geojson.png?downloads=true)](https://nodei.co/npm/gtfs-to-geojson/)
 
-`gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON.
+`gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON. This includes both shapes and stops.
 
 `gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data.
 
+## Current Usage
+Many transit agencies use `gtfs-to-html` to generate geoJSON used in maps on their websites, including:
+
+* [Marin transit](https://marintransit.org/)
+
+Let us know via opening a github issue or pull request if your agency is using this library.
+
 ## Installation
 
-Install `gtfs-to-geojson` directly from [npm](https://npmjs.org):
+If you would like to use this library as a command-line utility, you can install it globally directly from [npm](https://npmjs.org):
 
     npm install gtfs-to-geojson -g
+
+If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
 
 ## Command-line example
 
