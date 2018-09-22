@@ -22,7 +22,7 @@ const argv = require('yargs')
   .default('skipImport', undefined)
   .argv;
 
-const gtfsToGeoJSON = require('../');
+const gtfsToGeoJSON = require('../lib/gtfs-to-geojson');
 const utils = require('../lib/utils');
 
 function handleError(err) {
@@ -42,16 +42,17 @@ const getConfig = async () => {
 };
 
 getConfig()
-  .catch(err => {
+  .catch(error => {
     console.error(new Error(`Cannot find configuration file at \`${argv.configPath}\`. Use config-sample.json as a starting point, pass --configPath option`));
-    handleError(err);
+    handleError(error);
   })
   .then(async config => {
     const log = (config.verbose === false) ? _.noop : console.log;
 
     log('Starting gtfs-to-geojson');
     mongoose.Promise = global.Promise;
-    mongoose.connect(config.mongoUrl);
+    mongoose.set('useCreateIndex', true);
+    mongoose.connect(config.mongoUrl, {useNewUrlParser: true});
 
     await gtfsToGeoJSON(config);
 
