@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const resolve = require('path').resolve;
+const {resolve} = require('path');
 
 const _ = require('lodash');
 const fs = require('fs-extra');
 const mongoose = require('mongoose');
-const argv = require('yargs')
+const {argv} = require('yargs')
   .usage('Usage: $0 --config ./config.json')
   .help()
   .option('c', {
@@ -19,8 +19,7 @@ const argv = require('yargs')
     describe: 'Don\'t import GTFS file.',
     type: 'boolean'
   })
-  .default('skipImport', undefined)
-  .argv;
+  .default('skipImport', undefined);
 
 const gtfsToGeoJSON = require('../lib/gtfs-to-geojson');
 const utils = require('../lib/utils');
