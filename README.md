@@ -7,16 +7,20 @@
 
 [![NPM](https://nodei.co/npm/gtfs-to-geojson.png?downloads=true)](https://nodei.co/npm/gtfs-to-geojson/)
 
-`gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON. This includes both shapes and stops.
+`gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON. This includes both shapes and stops. It can be configured to generate one geoJSON file per route or a single file which contains all routes for an agency. This is useful for creating maps of transit routes.
 
-`gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data.
+<img width="762" src="https://user-images.githubusercontent.com/96217/81493949-96532f00-9259-11ea-9e09-d0399b59bf30.png">
+
+`gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data. If you are looking to generate HTML timetables in addition to maps, check out the [gtfs-to-html](https://github.com/BlinkTagInc/gtfs-to-html) project.
 
 ## Current Usage
-Many transit agencies use `gtfs-to-html` to generate geoJSON used in maps on their websites, including:
+Many transit agencies use `gtfs-to-geojson` to generate the maps for their websites, including:
 
-* [Marin transit](https://marintransit.org/)
+* [County Connection](https://countyconnection.com/)
+* [Kings Area Rural Transit (KART)](https://www.kartbus.org/)
+* [Marin Transit](https://marintransit.org/)
 
-Let us know via opening a github issue or pull request if your agency is using this library.
+Are you using `gtfs-to-geojson`? Let us know via email (brendan@blinktag.com) or via opening a github issue or pull request if your agency is using this library.
 
 ## Installation
 
