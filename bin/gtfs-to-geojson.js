@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const {resolve} = require('path');
+const { resolve } = require('path');
 
 const _ = require('lodash');
 const fs = require('fs-extra');
 const mongoose = require('mongoose');
-const {argv} = require('yargs')
+const { argv } = require('yargs')
   .usage('Usage: $0 --config ./config.json')
   .help()
   .option('c', {
@@ -51,7 +51,7 @@ getConfig()
     log('Starting gtfs-to-geojson');
     mongoose.Promise = global.Promise;
     mongoose.set('useCreateIndex', true);
-    mongoose.connect(config.mongoUrl, {useNewUrlParser: true});
+    mongoose.connect(config.mongoUrl, { useNewUrlParser: true });
 
     await gtfsToGeoJSON(config);
 
