@@ -145,7 +145,7 @@ API along with your API token.
 
 ### coordinatePrecision
 
-{Integer} The number of decimal places to include in the latitude and longitude of coordinates. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
+{Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
 
 ```
     "coordinatePrecision": 5
