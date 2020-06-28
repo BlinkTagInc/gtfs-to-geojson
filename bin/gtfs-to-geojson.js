@@ -49,9 +49,8 @@ getConfig()
     const log = (config.verbose === false) ? _.noop : console.log;
 
     log('Starting gtfs-to-geojson');
-    mongoose.Promise = global.Promise;
     mongoose.set('useCreateIndex', true);
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true });
+    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
     await gtfsToGeoJSON(config);
 
