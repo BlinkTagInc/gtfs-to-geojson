@@ -37,10 +37,7 @@ If you are using this as a node module as part of an application, you can includ
 ## Code example
 
     const gtfsToGeoJSON = require('gtfs-to-geojson');
-    const mongoose = require('mongoose');
     const config = require('config.json');
-
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
     gtfsToGeoJSON(config)
     .then(() => {
@@ -59,12 +56,12 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | option | type | description |
 | ------ | ---- | ----------- |
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
-| [`coordinatePrecision`](#coordinatePrecision) | integer | An array of GTFS files to be imported. |
-| [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. |
-| [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
-| [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
-| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency" and "route". |
-| [`zipOutput`](#zipoutput) | boolean | Whether or not to zip the output into one zip file. |
+| [`coordinatePrecision`](#coordinatePrecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional. |
+| [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. Optional, defaults to true. |
+| [`sqlitePath`](#sqlitePath) | string | A path to an SQLite database. Optional, defaults to using an in-memory database. |
+| [`verbose`](#verbose) | boolean | Whether or not to print output to the console. Optional, defaults to true. |
+| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency" and "route". Optional, defaults to "route". |
+| [`zipOutput`](#zipoutput) | boolean | Whether or not to zip the output into one zip file. Optional, defaults to false. |
 
 ### agencies
 
@@ -150,20 +147,12 @@ API along with your API token.
     "coordinatePrecision": 5
 ```
 
-### mongoUrl
+### sqlitePath
 
-{String} The MongoDB URI use. When running locally, you may want to use `mongodb://localhost:27017/gtfs`.
+{String} A path to an SQLite database. Optional, defaults to using an in-memory database.
 
 ```
-{
-  "mongoUrl": "mongodb://localhost:27017/gtfs",
-  "agencies": [
-    {
-      "agency_key": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/"
-    }
-  ]
-}
+    "sqlitePath": "/dev/sqlite/gtfs"
 ```
 
 ### includeStops
@@ -200,10 +189,6 @@ API along with your API token.
 
 ## Running
 
-Ensure than mongodb is running locally.
-
-    mongod
-
 To generate geoJSON, run `gtfs-to-geojson`.
 
     gtfs-to-geojson
@@ -222,7 +207,7 @@ This will download the GTFS file specified in `config.js` .  Then, `gtfs-to-geoj
 
 `skipImport`
 
-Skips importing GTFS into MongoDB. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported, you'll get an error.
+Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported, you'll get an error.
 
     gtfs-to-geojson --skipImport
 

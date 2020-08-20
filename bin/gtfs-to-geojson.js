@@ -4,7 +4,6 @@ const { resolve } = require('path');
 
 const _ = require('lodash');
 const fs = require('fs-extra');
-const mongoose = require('mongoose');
 const { argv } = require('yargs')
   .usage('Usage: $0 --config ./config.json')
   .help()
@@ -49,8 +48,6 @@ getConfig()
     const log = (config.verbose === false) ? _.noop : console.log;
 
     log('Starting gtfs-to-geojson');
-    mongoose.set('useCreateIndex', true);
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
     await gtfsToGeoJSON(config);
 

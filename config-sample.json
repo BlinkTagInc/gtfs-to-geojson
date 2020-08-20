@@ -1,5 +1,4 @@
 {
-  "mongoUrl": "mongodb://localhost:27017/gtfs",
   "agencies": [
     {
       "agency_key": "bart",
@@ -9,5 +8,6 @@
   "includeStops": true,
   "outputType": "route",
   "coordinatePrecision": 5,
+  "sqlitePath": "/dev/sqlite/gtfs",
   "zipOutput": false
 }
