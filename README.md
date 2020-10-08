@@ -207,7 +207,7 @@ This will download the GTFS file specified in `config.js` .  Then, `gtfs-to-geoj
 
 `skipImport`
 
-Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported, you'll get an error.
+Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported or you don't have an `sqlitePath` to a non-in-memory database, you'll get an error.
 
     gtfs-to-geojson --skipImport
 
