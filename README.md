@@ -152,7 +152,7 @@ API along with your API token.
 {String} A path to an SQLite database. Optional, defaults to using an in-memory database.
 
 ```
-    "sqlitePath": "/dev/sqlite/gtfs"
+    "sqlitePath": "/tmp/gtfs"
 ```
 
 ### includeStops

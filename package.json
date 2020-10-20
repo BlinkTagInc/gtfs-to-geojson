@@ -24,6 +24,7 @@
   },
   "main": "index",
   "dependencies": {
+    "@turf/helpers": "^6.1.4",
     "@turf/simplify": "^5.1.5",
     "archiver": "^5.0.2",
     "chalk": "^4.1.0",
