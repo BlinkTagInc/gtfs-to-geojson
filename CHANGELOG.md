@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2020-11-10
+### Added
+- Better geoJSON merge
+### Fixed
+- Handle no config.coordinatePrecision
+
+## [1.0.4] - 2020-10-13
+### Added
+- Support for extended GTFS route types
+
 ## [1.0.3] - 2020-10-13
 ### Updated
 - Dependency updates
