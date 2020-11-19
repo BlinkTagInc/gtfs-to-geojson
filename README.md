@@ -56,11 +56,12 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | option | type | description |
 | ------ | ---- | ----------- |
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
-| [`coordinatePrecision`](#coordinatePrecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional. |
-| [`includeStops`](#includeStops) | boolean | Whether or not to include stops in the geoJSON. Optional, defaults to true. |
-| [`sqlitePath`](#sqlitePath) | string | A path to an SQLite database. Optional, defaults to using an in-memory database. |
+| [`bufferSizeMeters`](#buffersizemeters) | integer | Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile). |
+| [`coordinatePrecision`](#coordinateprecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional. |
+| [`outputType`](#outputtype) | string | The grouping of the output. Options are "agency" and "route". Optional, defaults to "agency". |
+| [`outputFormat`](#outputformat) | string | The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops". |
+| [`sqlitePath`](#sqlitepath) | string | A path to an SQLite database. Optional, defaults to using an in-memory database. |
 | [`verbose`](#verbose) | boolean | Whether or not to print output to the console. Optional, defaults to true. |
-| [`outputType`](#outputType) | string | The grouping of the output. Options are "agency" and "route". Optional, defaults to "route". |
 | [`zipOutput`](#zipoutput) | boolean | Whether or not to zip the output into one zip file. Optional, defaults to false. |
 
 ### agencies
@@ -139,12 +140,48 @@ API along with your API token.
 }
 ```
 
+### bufferSizeMeters
+
+{Integer} Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile).
+
+```
+    "bufferSizeMeters": 400
+```
+
 ### coordinatePrecision
 
 {Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
 
 ```
     "coordinatePrecision": 5
+```
+
+### outputType
+
+{Array} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route and direction. Defaults to `agency`.
+
+```
+    "outputType": "agency"
+```
+
+### outputFormat
+
+{String} The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops".
+
+| Type              | Description                                  | Example |
+|-------------------|----------------------------------------------| ------- |
+| `envelope` | [Bounding box][http://wiki.gis.com/wiki/index.php/Minimum_bounding_rectangle] A rectangular box around route lines. | |
+| `convex` | [Convex hull][http://wiki.gis.com/wiki/index.php/Convex_hull] A convex polygon around route endpoints. | |
+| `stops` | [Points][http://wiki.gis.com/wiki/index.php/Point_Feature_Class] Stops as points. | |
+| `stops-buffer` | [Buffer][http://wiki.gis.com/wiki/index.php/Buffer_(GIS)] A buffer around stops. | |
+| `stops-dissolved` | [Dissolve][http://wiki.gis.com/wiki/index.php/Dissolve] A dissolved buffer around stops. | |
+| `lines` | [Lines][http://wiki.gis.com/wiki/index.php/Line_Feature_Class] Routes as lines. | |
+| `lines-buffer` | [Buffer][http://wiki.gis.com/wiki/index.php/Buffer_(GIS)] A buffer around route lines. | |
+| `lines-dissolved` | [Dissolve][http://wiki.gis.com/wiki/index.php/Dissolve] A dissolved buffer around route lines. | |
+| `lines-and-stops` | [Points and Lines][dissolve] Both points and lines for stops and routes. | |
+
+```
+    "outputFormat": "lines-and-stops"
 ```
 
 ### sqlitePath
@@ -155,14 +192,6 @@ API along with your API token.
     "sqlitePath": "/tmp/gtfs"
 ```
 
-### includeStops
-
-{Boolean} Whether or not to include stops in the geoJSON. Defaults to `true`.
-
-```
-    "includeStops": true
-```
-
 ### verbose
 
 {Boolean} If you don't want the import script to print any output to the console, you can set `verbose` to `false`. Defaults to `true`.
@@ -171,17 +200,9 @@ API along with your API token.
     "verbose": false
 ```
 
-### outputType
-
-{String} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route and direction. Defaults to `route`.
-
-```
-    "outputType": "route"
-```
-
 ### zipOutput
 
-{Boolean} Whether or not to zip the output into one zip file named `timetables.zip`. Defaults to `false`.
+{Boolean} Whether or not to zip the output into one zip file named `geojson.zip`. Defaults to `false`.
 
 ```
     "zipOutput": false
@@ -225,3 +246,7 @@ Pull requests are welcome, as is feedback and [reporting issues](https://github.
 ### Tests
 
     npm test
+
+### Credits
+
+    Ideas for including buffers, envelopes and convex service-area polygons came from [gtfs-service-area](https://github.com/cal-itp/gtfs-service-area).

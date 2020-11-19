@@ -5,9 +5,11 @@
       "url": "https://transitfeeds.com/p/bart/58/latest/download"
     }
   ],
-  "includeStops": true,
-  "outputType": "route",
+  "bufferSizeMeters": 400,
   "coordinatePrecision": 5,
+  "outputType": "agency",
+  "outputFormat": "stops-and-lines",
   "sqlitePath": "/dev/sqlite/gtfs",
+  "verbose": true,
   "zipOutput": false
 }
