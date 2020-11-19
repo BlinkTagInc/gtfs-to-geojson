@@ -237,11 +237,7 @@ Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged 
 
 By default, node has a memory limit of 512 MB or 1 GB. If you have a very large GTFS file, use the `max-old-space-size` option. For example to allocate 2 GB:
 
-    node --max-old-space-size=2000 /usr/local/bin/gtfs-to-geojson
-
-## Contributing
-
-Pull requests are welcome, as is feedback and [reporting issues](https://github.com/blinktaginc/gtfs-to-geojson/issues).
+    node --max-old-space-size=2000 ./bin/gtfs-to-geojson
 
 ### Tests
 
@@ -249,4 +245,8 @@ Pull requests are welcome, as is feedback and [reporting issues](https://github.
 
 ### Credits
 
-    Ideas for including buffers, envelopes and convex service-area polygons came from [gtfs-service-area](https://github.com/cal-itp/gtfs-service-area).
+Ideas for including buffers, envelopes and convex service-area polygons came from [gtfs-service-area](https://github.com/cal-itp/gtfs-service-area).
+
+## Contributing
+
+Pull requests are welcome, as is feedback and [reporting issues](https://github.com/blinktaginc/gtfs-to-geojson/issues).
