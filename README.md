@@ -142,7 +142,7 @@ API along with your API token.
 
 ### bufferSizeMeters
 
-{Integer} Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile).
+{Integer} Radius of buffers in meters. Optional, defaults to 400 meters (about 1/4 mile).
 
 ```
     "bufferSizeMeters": 400
@@ -150,7 +150,7 @@ API along with your API token.
 
 ### coordinatePrecision
 
-{Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding. `5` is a reasonable value (about 1.1 meters).
+{Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding which will result in larger file size and longer processing time. `5` is a reasonable value (about 1.1 meters).
 
 ```
     "coordinatePrecision": 5
@@ -168,17 +168,17 @@ API along with your API token.
 
 {String} The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops".
 
-| Type              | Description                                  | Example |
-|-------------------|----------------------------------------------| ------- |
-| `envelope` | [Bounding box][http://wiki.gis.com/wiki/index.php/Minimum_bounding_rectangle] A rectangular box around route lines. | |
-| `convex` | [Convex hull][http://wiki.gis.com/wiki/index.php/Convex_hull] A convex polygon around route endpoints. | |
-| `stops` | [Points][http://wiki.gis.com/wiki/index.php/Point_Feature_Class] Stops as points. | |
-| `stops-buffer` | [Buffer][http://wiki.gis.com/wiki/index.php/Buffer_(GIS)] A buffer around stops. | |
-| `stops-dissolved` | [Dissolve][http://wiki.gis.com/wiki/index.php/Dissolve] A dissolved buffer around stops. | |
-| `lines` | [Lines][http://wiki.gis.com/wiki/index.php/Line_Feature_Class] Routes as lines. | |
-| `lines-buffer` | [Buffer][http://wiki.gis.com/wiki/index.php/Buffer_(GIS)] A buffer around route lines. | |
-| `lines-dissolved` | [Dissolve][http://wiki.gis.com/wiki/index.php/Dissolve] A dissolved buffer around route lines. | |
-| `lines-and-stops` | [Points and Lines][dissolve] Both points and lines for stops and routes. | |
+| Format | Type | Description | Example | geoJSON |
+|------- | ---- | ----------- | ------- | ------- |
+| `envelope` | [Bounding box](http://wiki.gis.com/wiki/index.php/Minimum_bounding_rectangle) | A rectangular box around route lines. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/envelope.png"> | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/envelope.geojson) |
+| `convex` | [Convex hull](http://wiki.gis.com/wiki/index.php/Convex_hull) | A convex polygon around route endpoints. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/convex.png"> | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/convex.geojson) |
+| `stops` | [Points](http://wiki.gis.com/wiki/index.php/Point_Feature_Class) | Stops as points. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops.png"> | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops.geojson) |
+| `stops-buffer` | [Buffer](http://wiki.gis.com/wiki/index.php/Buffer_(GIS)) | A buffer around stops. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-buffer.png"> | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-buffer.geojson) |
+| `stops-dissolved` | [Dissolve](http://wiki.gis.com/wiki/index.php/Dissolve) | A dissolved buffer around stops. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-dissolved.geojson) |
+| `lines` | [Lines](http://wiki.gis.com/wiki/index.php/Line_Feature_Class) | Routes as lines. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines.png"> | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines.geojson) |
+| `lines-buffer` | [Buffer](http://wiki.gis.com/wiki/index.php/Buffer_(GIS)) | A buffer around route lines. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-buffer.png"> | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-buffer.geojson) |
+| `lines-dissolved` | [Dissolve](http://wiki.gis.com/wiki/index.php/Dissolve) | A dissolved buffer around route lines. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-dissolved.geojson) |
+| `lines-and-stops` | Points and Lines | Both points and lines for stops and routes. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-and-stops.png"> | [lines-and-stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-and-stops.geojson) |
 
 ```
     "outputFormat": "lines-and-stops"
