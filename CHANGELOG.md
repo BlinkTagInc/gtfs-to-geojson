@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2020-11-19
+### Changed
+- Better dissolve with polygon-clipping library
+### Fixed
+- Support for multi agency import
+
 ## [2.0.0] - 2020-11-19
 ### Added
 - New export types: envelope, convex, lines, lines-buffer, lines-dissolve, stops, stops-buffer, stops-dissolve, lines-and-stops.
