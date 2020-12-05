@@ -2,4 +2,4 @@ node_modules
 gtfs-downloads
 geojson
 config*
-!config-sample.json
+!config-sample*

@@ -16,9 +16,11 @@
 ## Current Usage
 Many transit agencies use `gtfs-to-geojson` to generate the maps for their websites, including:
 
+* [511 Contra Costa](https://511contracosta.org/public-transit/contra-costa-transit-map/)
 * [County Connection](https://countyconnection.com/)
 * [Kings Area Rural Transit (KART)](https://www.kartbus.org/)
 * [Marin Transit](https://marintransit.org/)
+* [MVgo](https://mvgo.org/)
 
 Are you using `gtfs-to-geojson`? Let us know via email (brendan@blinktag.com) or via opening a github issue or pull request if your agency is using this library.
 
@@ -52,6 +54,8 @@ If you are using this as a node module as part of an application, you can includ
 Copy `config-sample.json` to `config.json` and then add your projects configuration to `config.json`.
 
     cp config-sample.json config.json
+
+A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at `config-sample-bayarea.json`.  It is used generate data for the map on [bayareatransitmap.com](https://bayareatransitmap.com).
 
 | option | type | description |
 | ------ | ---- | ----------- |
@@ -97,6 +101,7 @@ API along with your API token.
   ]
 }
 ```
+
 * Specify a path to an unzipped GTFS file:
 ```
 {
@@ -104,6 +109,23 @@ API along with your API token.
     {
       "agency_key": "myAgency",
       "path": "/path/to/the/unzipped/gtfs/"
+    }
+  ]
+}
+```
+
+* Specify multiple agencies (each one will be imported and processed separately). See `config-sample-bayarea.json` for a working example of processing multiple agencies.
+
+```
+{
+  "agencies": [
+    {
+      "agency_key": "myAgency",
+      "path": "/path/to/the/gtfs.zip"
+    },
+    {
+      "agency_key": "otherAgency",
+      "path": "/path/to/the/othergtfs.zip"
     }
   ]
 }

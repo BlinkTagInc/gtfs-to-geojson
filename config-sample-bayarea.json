@@ -1,0 +1,125 @@
+{
+  "agencies": [
+    {
+      "agency_key": "ac",
+      "url": "https://api.actransit.org/transit/gtfs/download?token=2512B81107A09D2DC44895CDDC650D47"
+    },
+    {
+      "agency_key": "ace",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=CE&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "bart",
+      "url": "http://www.bart.gov/dev/schedules/google_transit.zip"
+    },
+    {
+      "agency_key": "caltrain",
+      "url": "http://data.trilliumtransit.com/gtfs/caltrain-ca-us/caltrain-ca-us.zip"
+    },
+    {
+      "agency_key": "capitolcorridor",
+      "url": "https://www.capitolcorridor.org/googletransit/GTFS.zip"
+    },
+    {
+      "agency_key": "countyconnection",
+      "url": "http://cccta.org/GTFS/google_transit.zip"
+    },
+    {
+      "agency_key": "dumbartonexpress",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=DE&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "emerygoround",
+      "url": "http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip"
+    },
+    {
+      "agency_key": "fast",
+      "url": "http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip"
+    },
+    {
+      "agency_key": "goldengate",
+      "url": "https://realtime.goldengate.org/gtfsstatic/GTFSTransitData.zip"
+    },
+    {
+      "agency_key": "lavta",
+      "url": "http://webwatch.lavta.org/TMGTFSRealTimeWebService/GTFS-Static/google_transit.zip"
+    },
+    {
+      "agency_key": "marintransit",
+      "url": "http://www.marintransit.org/data/google_transit.zip"
+    },
+    {
+      "agency_key": "mvgo",
+      "url": "http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip"
+    },
+    {
+      "agency_key": "napa",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=VN&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "petalumatransit",
+      "url": "http://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip"
+    },
+    {
+      "agency_key": "riovista",
+      "url": "http://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip"
+    },
+    {
+      "agency_key": "samtrans",
+      "url": "http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip"
+    },
+    {
+      "agency_key": "santarosa",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=SR&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "sctransit",
+      "url": "http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip"
+    },
+    {
+      "agency_key": "sfmta",
+      "url": "https://gtfs.sfmta.com/transitdata/google_transit.zip"
+    },
+    {
+      "agency_key": "smart",
+      "url": "http://data.trilliumtransit.com/gtfs/smart-ca-us/smart-ca-us.zip"
+    },
+    {
+      "agency_key": "soltrans",
+      "url": "http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip"
+    },
+    {
+      "agency_key": "southcity",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=SS&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "tdt",
+      "url": "https://transitfeeds.com/p/tri-delta-transit/1148/latest/download"
+    },
+    {
+      "agency_key": "unioncity",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=UC&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "vacaville",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=VC&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
+      "agency_key": "vta",
+      "url": "https://gtfs.vta.org/gtfs_vta.zip"
+    },
+    {
+      "agency_key": "westcat",
+      "url": "http://data.trilliumtransit.com/gtfs/westcat-ca-us/westcat-ca-us.zip"
+    },
+    {
+      "agency_key": "weta",
+      "url": "http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip"
+    }
+  ],
+  "bufferSizeMeters": 1000,
+  "coordinatePrecision": 5,
+  "outputType": "agency",
+  "outputFormat": "stops-dissolved",
+  "zipOutput": false
+}
