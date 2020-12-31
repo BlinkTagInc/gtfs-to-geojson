@@ -40,16 +40,18 @@ If you are using this as a node module as part of an application, you can includ
 
 ## Code example
 
-    const gtfsToGeoJSON = require('gtfs-to-geojson');
-    const config = require('config.json');
+```js
+const gtfsToGeoJSON = require('gtfs-to-geojson');
+const config = require('config.json');
 
-    gtfsToGeoJSON(config)
-    .then(() => {
-      console.log('GeoJSON Generation Successful');
-    })
-    .catch(err => {
-      console.error(err);
-    });
+gtfsToGeoJSON(config)
+.then(() => {
+  console.log('GeoJSON Generation Successful');
+})
+.catch(err => {
+  console.error(err);
+});
+```
 
 ## Configuration
 
@@ -81,7 +83,7 @@ URL from the agency's website or you can use a URL generated from the transitfee
 API along with your API token.
 
 * Specify a download URL:
-```
+```json
 {
   "agencies": [
     {
@@ -93,7 +95,7 @@ API along with your API token.
 ```
 
 * Specify a path to a zipped GTFS file:
-```
+```json
 {
   "agencies": [
     {
@@ -105,7 +107,7 @@ API along with your API token.
 ```
 
 * Specify a path to an unzipped GTFS file:
-```
+```json
 {
   "agencies": [
     {
@@ -118,7 +120,7 @@ API along with your API token.
 
 * Specify multiple agencies (each one will be imported and processed separately). See `config-sample-bayarea.json` for a working example of processing multiple agencies.
 
-```
+```json
 {
   "agencies": [
     {
@@ -135,7 +137,7 @@ API along with your API token.
 
 * Exclude files - if you don't want all GTFS files to be imported, you can specify an array of files to exclude.
 
-```
+```json
 {
   "agencies": [
     {
@@ -152,7 +154,7 @@ API along with your API token.
 
 * Optionally specify a proj4 projection string to correct poorly formed coordinates in the GTFS file
 
-```
+```json
 {
   "agencies": [
     {
@@ -168,24 +170,24 @@ API along with your API token.
 
 {Integer} Radius of buffers in meters. Optional, defaults to 400 meters (about 1/4 mile).
 
-```
-    "bufferSizeMeters": 400
+```json
+"bufferSizeMeters": 400
 ```
 
 ### coordinatePrecision
 
 {Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding which will result in larger file size and longer processing time. `5` is a reasonable value (about 1.1 meters).
 
-```
-    "coordinatePrecision": 5
+```json
+"coordinatePrecision": 5
 ```
 
 ### outputType
 
 {Array} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route and direction. Defaults to `agency`.
 
-```
-    "outputType": "agency"
+```json
+"outputType": "agency"
 ```
 
 ### outputFormat
