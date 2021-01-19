@@ -1,60 +1,32 @@
 {
   "name": "gtfs-to-geojson",
+  "version": "2.0.4",
+  "private": false,
   "description": "Generate geoJSON of transit route data from a GTFS file",
-  "version": "2.0.3",
   "keywords": [
     "transit",
     "gtfs",
     "transportation",
     "geojson"
   ],
-  "private": false,
+  "bugs": {
+    "url": "https://github.com/blinktaginc/gtfs-to-geojson/issues"
+  },
+  "repository": "git://github.com/blinktaginc/gtfs-to-geojson",
+  "license": "MIT",
   "author": "Brendan Nee <brendan@blinktag.com>",
   "contributors": [
     "Kegan Maher"
   ],
-  "repository": "git://github.com/blinktaginc/gtfs-to-geojson",
-  "bugs": {
-    "url": "https://github.com/blinktaginc/gtfs-to-geojson/issues"
-  },
-  "license": "MIT",
-  "scripts": {
-    "lint": "xo"
-  },
+  "main": "index",
   "bin": {
     "gtfs-to-geojson": "bin/gtfs-to-geojson.js"
   },
-  "main": "index",
-  "dependencies": {
-    "@turf/bbox": "^6.0.1",
-    "@turf/bbox-polygon": "^6.0.1",
-    "@turf/buffer": "^5.1.5",
-    "@turf/convex": "^6.0.3",
-    "@turf/helpers": "^6.1.4",
-    "@turf/meta": "^6.0.2",
-    "@turf/simplify": "^5.1.5",
-    "@turf/union": "^6.0.3",
-    "archiver": "^5.1.0",
-    "chalk": "^4.1.0",
-    "cli-table": "^0.3.4",
-    "fs-extra": "^9.0.1",
-    "gtfs": "^2.2.2",
-    "lodash": "^4.17.20",
-    "polygon-clipping": "^0.15.1",
-    "pretty-error": "^2.1.2",
-    "sanitize-filename": "^1.6.3",
-    "timer-machine": "^1.1.0",
-    "yargs": "^16.2.0"
-  },
-  "devDependencies": {
-    "xo": "0.36.1"
-  },
-  "engines": {
-    "node": ">= 12.14.0"
+  "scripts": {
+    "lint": "xo"
   },
   "xo": {
     "esnext": true,
-    "space": true,
     "rules": {
       "camelcase": [
         "error",
@@ -66,6 +38,33 @@
         "error",
         "always"
       ]
-    }
+    },
+    "space": true
+  },
+  "dependencies": {
+    "@turf/bbox": "^6.2.0",
+    "@turf/bbox-polygon": "^6.2.0",
+    "@turf/buffer": "^6.2.0",
+    "@turf/convex": "^6.2.0",
+    "@turf/helpers": "^6.2.0",
+    "@turf/meta": "^6.2.0",
+    "@turf/simplify": "^6.2.0",
+    "archiver": "^5.2.0",
+    "chalk": "^4.1.0",
+    "cli-table": "^0.3.4",
+    "fs-extra": "^9.0.1",
+    "gtfs": "^2.2.4",
+    "lodash": "^4.17.20",
+    "polygon-clipping": "^0.15.2",
+    "pretty-error": "^3.0.3",
+    "sanitize-filename": "^1.6.3",
+    "timer-machine": "^1.1.0",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "xo": "0.37.1"
+  },
+  "engines": {
+    "node": ">= 12.14.0"
   }
 }
