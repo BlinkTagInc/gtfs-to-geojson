@@ -1,1 +1,1 @@
-module.exports = require('./lib/gtfs-to-geojson');
+export { default } from './lib/gtfs-to-geojson.js';

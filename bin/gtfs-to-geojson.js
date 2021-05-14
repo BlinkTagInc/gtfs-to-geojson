@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 
-const { argv } = require('yargs')
+import yargs from 'yargs';
+/* eslint-disable-next-line node/file-extension-in-import */
+import { hideBin } from 'yargs/helpers';
+
+import gtfsToGeoJSON from '../lib/gtfs-to-geojson.js';
+import { getConfig } from '../lib/file-utils.js';
+import { formatError } from '../lib/log-utils.js';
+
+const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 --config ./config.json')
   .help()
   .option('c', {
@@ -16,19 +24,15 @@ const { argv } = require('yargs')
   })
   .default('skipImport', undefined);
 
-const gtfsToGeoJSON = require('../lib/gtfs-to-geojson');
-const fileUtils = require('../lib/file-utils');
-const logUtils = require('../lib/log-utils');
-
 const handleError = error => {
   const text = error || 'Unknown Error';
-  process.stdout.write(`\n${logUtils.formatError(text)}\n`);
+  process.stdout.write(`\n${formatError(text)}\n`);
   console.error(error);
   process.exit(1);
 };
 
 const setupImport = async () => {
-  const config = await fileUtils.getConfig(argv);
+  const config = await getConfig(argv);
   await gtfsToGeoJSON(config);
   process.exit();
 };

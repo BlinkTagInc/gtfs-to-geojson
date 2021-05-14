@@ -1,6 +1,6 @@
 {
   "name": "gtfs-to-geojson",
-  "version": "2.0.6",
+  "version": "3.0.0",
   "private": false,
   "description": "Generate geoJSON of transit route data from a GTFS file",
   "keywords": [
@@ -18,7 +18,8 @@
   "contributors": [
     "Kegan Maher"
   ],
-  "main": "index",
+  "type": "module",
+  "main": "index.js",
   "bin": {
     "gtfs-to-geojson": "bin/gtfs-to-geojson.js"
   },
@@ -52,9 +53,8 @@
     "archiver": "^5.3.0",
     "chalk": "^4.1.1",
     "cli-table": "^0.3.6",
-    "fs-extra": "^10.0.0",
-    "gtfs": "^2.4.3",
-    "lodash": "^4.17.21",
+    "gtfs": "^3.0.0",
+    "lodash-es": "^4.17.21",
     "polygon-clipping": "^0.15.3",
     "pretty-error": "^3.0.3",
     "sanitize-filename": "^1.6.3",
@@ -62,7 +62,7 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "xo": "0.39.1"
+    "xo": "0.40.1"
   },
   "engines": {
     "node": ">= 12.14.0"

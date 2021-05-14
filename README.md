@@ -41,8 +41,9 @@ If you are using this as a node module as part of an application, you can includ
 ## Code example
 
 ```js
-const gtfsToGeoJSON = require('gtfs-to-geojson');
-const config = require('config.json');
+import gtfsToGeoJSON from 'gtfs-to-geojson';
+import { readFile } from 'fs/promises';
+const config = JSON.parse(await readFile(new URL('./config.json', import.meta.url)));
 
 gtfsToGeoJSON(config)
 .then(() => {
