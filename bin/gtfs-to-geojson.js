@@ -8,7 +8,7 @@ import gtfsToGeoJSON from '../lib/gtfs-to-geojson.js';
 import { getConfig } from '../lib/file-utils.js';
 import { formatError } from '../lib/log-utils.js';
 
-const argv = yargs(hideBin(process.argv))
+const { argv } = yargs(hideBin(process.argv))
   .usage('Usage: $0 --config ./config.json')
   .help()
   .option('c', {
