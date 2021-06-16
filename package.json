@@ -1,6 +1,6 @@
 {
   "name": "gtfs-to-geojson",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": false,
   "description": "Generate geoJSON of transit route data from a GTFS file",
   "keywords": [
@@ -37,10 +37,10 @@
     "archiver": "^5.3.0",
     "chalk": "^4.1.1",
     "cli-table": "^0.3.6",
-    "gtfs": "^3.0.1",
+    "gtfs": "^3.0.3",
     "lodash-es": "^4.17.21",
     "polygon-clipping": "^0.15.3",
-    "pretty-error": "^3.0.3",
+    "pretty-error": "^3.0.4",
     "sanitize-filename": "^1.6.3",
     "timer-machine": "^1.1.0",
     "yargs": "^17.0.1"
