@@ -1,6 +1,6 @@
 {
   "name": "gtfs-to-geojson",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "private": false,
   "description": "Generate geoJSON of transit route data from a GTFS file",
   "keywords": [
@@ -27,17 +27,17 @@
     "lint": "eslint **/*.js --fix"
   },
   "dependencies": {
-    "@turf/bbox": "^6.3.0",
-    "@turf/bbox-polygon": "^6.3.0",
-    "@turf/buffer": "^6.3.0",
-    "@turf/convex": "^6.3.0",
-    "@turf/helpers": "^6.3.0",
-    "@turf/meta": "^6.3.0",
-    "@turf/simplify": "^6.3.0",
+    "@turf/bbox": "^6.5.0",
+    "@turf/bbox-polygon": "^6.5.0",
+    "@turf/buffer": "^6.5.0",
+    "@turf/convex": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/meta": "^6.5.0",
+    "@turf/simplify": "^6.5.0",
     "archiver": "^5.3.0",
-    "chalk": "^4.1.1",
+    "chalk": "^4.1.2",
     "cli-table": "^0.3.6",
-    "gtfs": "^3.0.3",
+    "gtfs": "^3.1.0",
     "lodash-es": "^4.17.21",
     "polygon-clipping": "^0.15.3",
     "pretty-error": "^3.0.4",
@@ -46,7 +46,7 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "eslint": "^7.28.0",
+    "eslint": "^7.32.0",
     "eslint-config-xo": "^0.37.0"
   },
   "engines": {
