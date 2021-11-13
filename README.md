@@ -1,11 +1,22 @@
-# GTFS to GeoJSON
+<p align="center">
+  ➡️
+  <a href="#installation">Installation</a> |
+  <a href="#quick-start">Quick Start</a> |
+  <a href="#configuration">Configuration</a> 
+  ⬅️
+  <br /><br />
+  <img src="docs/images/gtfs-to-geojson-logo.svg" alt="GTFS-to-HTML" />
+  <br /><br />
+  <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/v/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
+  <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/dm/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  <br /><br />
+  Generate geoJSON of transit route data from a GTFS file.
+  <br /><br />
+  <a href="https://nodei.co/npm/gtfs-to-geojson/" rel="nofollow"><img src="https://nodei.co/npm/gtfs-to-geojson.png?downloads=true" alt="NPM" style="max-width: 100%;"></a>
+</p>
 
-[![NPM version](https://img.shields.io/npm/v/gtfs-to-geojson.svg?style=flat)](https://www.npmjs.com/package/gtfs-to-geojson)
-[![David](https://img.shields.io/david/blinktaginc/gtfs-to-geojson.svg)]()
-[![npm](https://img.shields.io/npm/dm/gtfs-to-geojson.svg?style=flat)]()
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
-
-[![NPM](https://nodei.co/npm/gtfs-to-geojson.png?downloads=true)](https://nodei.co/npm/gtfs-to-geojson/)
+<hr>
 
 `gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into geoJSON. This includes both shapes and stops. It can be configured to generate one geoJSON file per route or a single file which contains all routes for an agency. This is useful for creating maps of transit routes.
 
@@ -34,11 +45,13 @@ If you would like to use this library as a command-line utility, you can install
 
 If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
 
-## Command-line example
+## Quick Start
+
+### Command-line example
 
     gtfs-to-geojson --configPath /path/to/your/custom-config.json
 
-## Code example
+### Code example
 
 ```js
 import gtfsToGeoJSON from 'gtfs-to-geojson';
@@ -265,10 +278,6 @@ Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged 
 By default, node has a memory limit of 512 MB or 1 GB. If you have a very large GTFS file, use the `max-old-space-size` option. For example to allocate 2 GB:
 
     node --max-old-space-size=2000 ./bin/gtfs-to-geojson
-
-### Tests
-
-    npm test
 
 ### Credits
 
