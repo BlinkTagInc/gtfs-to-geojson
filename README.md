@@ -5,7 +5,7 @@
   <a href="#configuration">Configuration</a> 
   ⬅️
   <br /><br />
-  <img src="docs/images/gtfs-to-geojson-logo.svg" alt="GTFS-to-HTML" />
+  <img src="docs/images/gtfs-to-geojson-logo.svg" alt="GTFS-to-GeoJSON" />
   <br /><br />
   <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/v/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
   <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/dm/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
