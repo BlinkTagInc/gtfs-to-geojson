@@ -198,7 +198,14 @@ API along with your API token.
 
 ### outputType
 
-{Array} The grouping of the output. Choose "agency" to output one geoJSON file with all routes for a single agency. Choose "route" to output one geoJSON file per route and direction. Defaults to `agency`.
+{String} The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to `agency`.
+
+
+| outputType | Description |
+| ---------- | ----------- |
+| `agency` | Output one geoJSON file with all routes for a single agency combined together. |
+| `route` | Output one geoJSON file per route and direction. |
+| `shape` | Output one geoJSON file per shape_id. |
 
 ```json
 "outputType": "agency"
@@ -209,7 +216,7 @@ API along with your API token.
 {String} The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops".
 
 | Format | Type | Description | Example | geoJSON |
-|------- | ---- | ----------- | ------- | ------- |
+| ------ | ---- | ----------- | ------- | ------- |
 | `envelope` | [Bounding box](http://wiki.gis.com/wiki/index.php/Minimum_bounding_rectangle) | A rectangular box around route lines. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/envelope.png"> | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/envelope.geojson) |
 | `convex` | [Convex hull](http://wiki.gis.com/wiki/index.php/Convex_hull) | A convex polygon around route endpoints. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/convex.png"> | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/convex.geojson) |
 | `stops` | [Points](http://wiki.gis.com/wiki/index.php/Point_Feature_Class) | Stops as points. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops.png"> | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops.geojson) |
