@@ -35,7 +35,6 @@
     "@turf/meta": "^6.5.0",
     "@turf/simplify": "^6.5.0",
     "archiver": "^5.3.1",
-    "chalk": "^5.0.1",
     "cli-table": "^0.3.11",
     "gtfs": "^3.3.1",
     "lodash-es": "^4.17.21",
@@ -43,7 +42,8 @@
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.3",
     "timer-machine": "^1.1.0",
-    "yargs": "^17.4.1"
+    "yargs": "^17.4.1",
+    "yoctocolors": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^8.14.0",
