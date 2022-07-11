@@ -36,18 +36,18 @@
     "@turf/simplify": "^6.5.0",
     "archiver": "^5.3.1",
     "cli-table": "^0.3.11",
-    "gtfs": "^3.3.1",
+    "gtfs": "^3.5.0",
     "lodash-es": "^4.17.21",
     "polygon-clipping": "^0.15.3",
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.3",
     "timer-machine": "^1.1.0",
-    "yargs": "^17.4.1",
+    "yargs": "^17.5.1",
     "yoctocolors": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.14.0",
-    "eslint-config-xo": "^0.40.0"
+    "eslint": "^8.19.0",
+    "eslint-config-xo": "^0.41.0"
   },
   "engines": {
     "node": ">= 12.14.0"

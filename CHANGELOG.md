@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 - Use yoctocolors instead of chalk
+- Dependency updates
 
 ## [3.1.0] - 2022-04-29
 ### Added
