@@ -282,9 +282,10 @@ Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged 
 
 ## Processing very large GTFS files.
 
-By default, node has a memory limit of 512 MB or 1 GB. If you have a very large GTFS file, use the `max-old-space-size` option. For example to allocate 2 GB:
-
-    node --max-old-space-size=2000 ./bin/gtfs-to-geojson
+By default, node has a memory limit of 512 MB or 1 GB. If you have a very large GTFS file, use the `max-old-space-size` option. For example to allocate 12 GB: 
+  
+    export NODE_OPTIONS="--max-old-space-size=30000"
+    gtfs-to-geojson
 
 ### Credits
 
