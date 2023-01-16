@@ -21,6 +21,10 @@
       "url": "https://www.capitolcorridor.org/googletransit/GTFS.zip"
     },
     {
+      "agency_key": "commuteorg",
+      "url": "https://data.trilliumtransit.com/gtfs/commute-ca-us/commute-ca-us.zip"
+    },
+    {
       "agency_key": "countyconnection",
       "url": "http://cccta.org/GTFS/google_transit.zip"
     },
@@ -47,6 +51,10 @@
     {
       "agency_key": "marintransit",
       "url": "http://www.marintransit.org/data/google_transit.zip"
+    },
+    {
+      "agency_key": "missionbay",
+      "url": "https://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip"
     },
     {
       "agency_key": "mvgo",
@@ -93,8 +101,16 @@
       "url": "http://api.511.org/transit/datafeeds?operator_id=SS&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
     },
     {
+      "agency_key": "stanford",
+      "url": "https://transportation-forms.stanford.edu/google/google_transit.zip"
+    },
+    {
       "agency_key": "tdt",
       "url": "https://transitfeeds.com/p/tri-delta-transit/1148/latest/download"
+    },
+    {
+      "agency_key": "tideline",
+      "url": "https://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip"
     },
     {
       "agency_key": "unioncity",
@@ -117,7 +133,7 @@
       "url": "http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip"
     }
   ],
-  "bufferSizeMeters": 1000,
+  "bufferSizeMeters": 800,
   "coordinatePrecision": 5,
   "outputType": "agency",
   "outputFormat": "stops-dissolved",
