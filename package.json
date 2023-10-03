@@ -35,9 +35,9 @@
     "@turf/meta": "^6.5.0",
     "@turf/simplify": "^6.5.0",
     "@turf/union": "^6.5.0",
-    "archiver": "^5.3.1",
+    "archiver": "^6.0.1",
     "cli-table": "^0.3.11",
-    "gtfs": "^4.4.3",
+    "gtfs": "^4.5.0",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.3",
@@ -47,8 +47,8 @@
   },
   "devDependencies": {
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
-    "prettier": "^3.0.0"
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3"
   },
   "engines": {
     "node": ">= 18.0.0"
