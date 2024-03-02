@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Dependency updates
 
+### Added
+
+- Support for creating geoJSON lines from GTFS without shapes.txt
+
 ## [3.4.4] - 2023-10-03
 
 ### Updated
