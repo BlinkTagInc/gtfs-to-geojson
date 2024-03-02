@@ -35,20 +35,20 @@
     "@turf/meta": "^6.5.0",
     "@turf/simplify": "^6.5.0",
     "@turf/union": "^6.5.0",
-    "archiver": "^6.0.1",
+    "archiver": "^7.0.0",
     "cli-table": "^0.3.11",
-    "gtfs": "^4.5.0",
+    "gtfs": "^4.7.1",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.3",
     "timer-machine": "^1.1.0",
     "yargs": "^17.7.2",
-    "yoctocolors": "^1.0.0"
+    "yoctocolors": "^2.0.0"
   },
   "devDependencies": {
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
-    "prettier": "^3.0.3"
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5"
   },
   "engines": {
     "node": ">= 18.0.0"
