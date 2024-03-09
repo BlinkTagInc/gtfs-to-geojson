@@ -37,7 +37,7 @@
     "@turf/union": "^6.5.0",
     "archiver": "^7.0.0",
     "cli-table": "^0.3.11",
-    "gtfs": "^4.7.1",
+    "gtfs": "^4.7.2",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.3",

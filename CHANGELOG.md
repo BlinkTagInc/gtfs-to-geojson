@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - startDate and endDate config params
 
+## Updated
+
+ - Dependency updates
+
 ## [3.5.0] - 2024-03-01
 
 ### Updated
