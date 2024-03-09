@@ -83,8 +83,10 @@ A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at
 | [`agencies`](#agencies)                       | array   | An array of GTFS files to be imported.                                                                                                                                                                             |
 | [`bufferSizeMeters`](#buffersizemeters)       | integer | Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile).                                                                                                                                          |
 | [`coordinatePrecision`](#coordinateprecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional.                                                                                         |
+| [`endDate`](#enddate)                   | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.            |
 | [`outputType`](#outputtype)                   | string  | The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to "agency".                                                                                                                      |
 | [`outputFormat`](#outputformat)               | string  | The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops". |
+| [`startDate`](#startdate)                   | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.            |
 | [`sqlitePath`](#sqlitepath)                   | string  | A path to an SQLite database. Optional, defaults to using an in-memory database.                                                                                                                                   |
 | [`verbose`](#verbose)                         | boolean | Whether or not to print output to the console. Optional, defaults to true.                                                                                                                                         |
 | [`zipOutput`](#zipoutput)                     | boolean | Whether or not to zip the output into one zip file. Optional, defaults to false.                                                                                                                                   |
@@ -199,6 +201,14 @@ API along with your API token.
 "coordinatePrecision": 5
 ```
 
+### endDate
+
+{String} A date in YYYYMMDD format to use to filter service_ids in calendar.txt. Useful in combination with `startDate` configuration option. Optional, if not specified, all services in GTFS will be used.
+
+```
+    "endDate": "20240401"
+```
+
 ### outputType
 
 {String} The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to `agency`.
@@ -237,10 +247,18 @@ Only stops which are used in one or more routes will be output in geoJSON.
 
 ### sqlitePath
 
-{String} A path to an SQLite database. Optional, defaults to using an in-memory database with a value of `:memory:`. If you want the data imported to persist, you need to specify a value for `sqlitePath`. Supports tilde as part of the path, like `~/Documents/gtfs`.
+{String} A path to an SQLite database. Optional, defaults to using an in-memory database with a value of `:memory:`. If you want the data imported to persist, you need to specify a value for `sqlitePath`. Supports tilde as part of the path, like `~/Downloads/gtfs`.
 
 ```
     "sqlitePath": "/tmp/gtfs"
+```
+
+### startDate
+
+{String} A date in YYYYMMDD format to use to filter service_ids in calendar.txt. Useful in combination with `endDate` configuration option. Optional, if not specified, all services in GTFS will be used.
+
+```
+    "startDate": "20240301"
 ```
 
 ### verbose
