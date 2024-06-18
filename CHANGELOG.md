@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved dissolve function
 - Fix for adding properties
+- Fix for convex calculation
 
 ## [3.6.1] - 2024-04-09
 
