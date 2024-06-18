@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Updated
 
  - Dependency updates
+ - Additional GTFS files to exclude
+
+## Fixed
+
+- Improved dissolve function
 
 ## [3.6.1] - 2024-04-09
 
