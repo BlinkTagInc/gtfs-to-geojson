@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Handle duplicate geojson filenames
 
+ ## Added
+
+- Progress Bar
+
 ## [3.7.0] - 2024-06-18
 
 ## Updated
