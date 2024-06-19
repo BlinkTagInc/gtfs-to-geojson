@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Progress Bar
 
+## Updated
+
+- Limit concurrency
+
 ## [3.7.0] - 2024-06-18
 
 ## Updated
