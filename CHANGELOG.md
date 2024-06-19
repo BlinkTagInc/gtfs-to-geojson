@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Changed
+## Updated
 
 - Updated geoJSON filenames to be unique
+- Improved error formatting
 
 ## [3.7.1] - 2024-06-19
 
