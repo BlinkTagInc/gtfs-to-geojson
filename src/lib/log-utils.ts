@@ -168,7 +168,7 @@ const generateProgressBarString = (barTotal, barProgress, size = 40) => {
 /*
  * Print a progress bar to the console.
  */
-export function progressBar(formatString, barTotal, config) {
+export function progressBar(formatString: string, barTotal: number, config) {
   let barProgress = 0;
 
   if (config.verbose === false) {
@@ -179,7 +179,10 @@ export function progressBar(formatString, barTotal, config) {
   }
 
   if (barTotal === 0) {
-    return null;
+    return {
+      interrupt(text: string) {},
+      increment() {},
+    };
   }
 
   const renderProgressString = () =>
@@ -191,7 +194,7 @@ export function progressBar(formatString, barTotal, config) {
   config.log(renderProgressString(), true);
 
   return {
-    interrupt(text) {
+    interrupt(text: string) {
       // Log two lines to avoid overwrite by progress bar
       config.logWarning(text);
       config.log('');

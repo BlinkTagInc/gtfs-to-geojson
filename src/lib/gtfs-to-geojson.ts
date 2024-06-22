@@ -13,6 +13,7 @@ import { getExportPath, zipFolder } from './file-utils.js';
 import { msToSeconds } from './formatters.js';
 import {
   log,
+  logError,
   logWarning,
   generateLogText,
   logStats,
@@ -29,13 +30,42 @@ import stops from './formats/stops.js';
 import stopsBuffer from './formats/stops-buffer.js';
 import stopsDissolved from './formats/stops-dissolved.js';
 
+interface IConfig {
+  agencies: {
+    agency_key: string;
+    url?: string;
+    path?: string;
+    exclude?: string[];
+  }[];
+  bufferSizeMeters?: number;
+  coordinatePrecision?: number;
+  outputType?: string;
+  outputFormat?: string;
+  startDate?: string;
+  endDate?: string;
+  verbose?: boolean;
+  zipOutput?: boolean;
+  sqlitePath?: string;
+  log: (text: string) => void;
+  logWarning: (text: string) => void;
+  logError: (text: string) => void;
+}
+
+interface ICalendar {
+  service_id: string;
+}
+
+interface IShape {
+  shape_id: string;
+}
+
 const limit = pLimit(20);
 
 const { version } = JSON.parse(
-  readFileSync(new URL('../package.json', import.meta.url)),
+  readFileSync(new URL('../../package.json', import.meta.url).pathname, 'utf8'),
 );
 
-const setDefaultConfig = (config) => {
+const setDefaultConfig = (initialConfig: IConfig) => {
   const defaults = {
     gtfsToGeoJSONVersion: version,
     bufferSizeMeters: 400,
@@ -44,15 +74,18 @@ const setDefaultConfig = (config) => {
     skipImport: false,
     verbose: true,
     zipOutput: false,
+    log: log(initialConfig),
+    logWarning: logWarning(initialConfig),
+    logError: logError(initialConfig),
   };
 
-  return Object.assign(defaults, config);
+  return Object.assign(defaults, initialConfig);
 };
 
 /*
  * Get calendars for a specified date range
  */
-const getCalendarsForDateRange = (config) => {
+const getCalendarsForDateRange = (config: IConfig) => {
   const db = openDb(config);
   let whereClause = '';
   const whereClauses = [];
@@ -72,7 +105,7 @@ const getCalendarsForDateRange = (config) => {
   return db.prepare(`SELECT * FROM calendar ${whereClause}`).all();
 };
 
-const getGeoJSONByFormat = (config, query = {}) => {
+const getGeoJSONByFormat = (config: IConfig, query = {}) => {
   if (config.outputFormat === 'envelope') {
     return envelope(config, query);
   }
@@ -114,15 +147,19 @@ const getGeoJSONByFormat = (config, query = {}) => {
   );
 };
 
-const buildGeoJSON = async (agencyKey, config, outputStats) => {
+const buildGeoJSON = async (
+  agencyKey: string,
+  config: IConfig,
+  outputStats: { files: number; shapes: number; routes: number },
+) => {
   const db = openDb(config);
 
-  const calendars = getCalendarsForDateRange(config);
+  const calendars: ICalendar[] = getCalendarsForDateRange(config);
 
   const serviceIds = calendars.map((calendar) => calendar.service_id);
 
   if (config.outputType === 'shape') {
-    const shapes = await db
+    const shapes: IShape[] = await db
       .prepare('SELECT DISTINCT shape_id FROM shapes')
       .all();
 
@@ -253,10 +290,8 @@ const buildGeoJSON = async (agencyKey, config, outputStats) => {
   }
 };
 
-const gtfsToGeoJSON = async (initialConfig) => {
+const gtfsToGeoJSON = async (initialConfig: IConfig) => {
   const config = setDefaultConfig(initialConfig);
-  config.log = log(config);
-  config.logWarning = logWarning(config);
 
   await openDb(config);
 
@@ -295,8 +330,10 @@ const gtfsToGeoJSON = async (initialConfig) => {
 
     if (config.skipImport !== true) {
       // Import GTFS
-      const agencyConfig = clone(omit(config, 'agencies'));
-      agencyConfig.agencies = [agency];
+      const agencyConfig = {
+        ...clone(omit(config, 'agencies')),
+        agencies: [agency],
+      };
 
       await importGtfs(agencyConfig);
     }

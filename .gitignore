@@ -1,5 +1,12 @@
+# dependencies
 node_modules
-gtfs-downloads
+
+# output
 geojson
+
+# config files
 config*
 !config-sample*
+
+# Build files
+/dist
