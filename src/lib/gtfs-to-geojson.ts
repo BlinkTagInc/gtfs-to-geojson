@@ -51,10 +51,6 @@ interface IConfig {
   logError: (text: string) => void;
 }
 
-interface ICalendar {
-  service_id: string;
-}
-
 interface IShape {
   shape_id: string;
 }
@@ -83,9 +79,9 @@ const setDefaultConfig = (initialConfig: IConfig) => {
 };
 
 /*
- * Get calendars for a specified date range
+ * Get a list of service_id for a specified date range
  */
-const getCalendarsForDateRange = (config: IConfig) => {
+const getServiceIdsForDateRange = (config: IConfig) => {
   const db = openDb(config);
   let whereClause = '';
   const whereClauses = [];
@@ -102,7 +98,11 @@ const getCalendarsForDateRange = (config: IConfig) => {
     whereClause = `WHERE ${whereClauses.join(' AND ')}`;
   }
 
-  return db.prepare(`SELECT * FROM calendar ${whereClause}`).all();
+  const calendars = db.prepare(`SELECT * FROM calendar ${whereClause}`).all();
+
+  return calendars.map(
+    (calendar: Record<string, string>) => calendar.service_id,
+  );
 };
 
 const getGeoJSONByFormat = (config: IConfig, query = {}) => {
@@ -153,10 +153,12 @@ const buildGeoJSON = async (
   outputStats: { files: number; shapes: number; routes: number },
 ) => {
   const db = openDb(config);
+  const baseQuery: { service_id?: string | string[] } = {};
 
-  const calendars: ICalendar[] = getCalendarsForDateRange(config);
-
-  const serviceIds = calendars.map((calendar) => calendar.service_id);
+  if (config.startDate || config.endDate) {
+    const serviceIds: string[] = getServiceIdsForDateRange(config);
+    baseQuery.service_id = serviceIds;
+  }
 
   if (config.outputType === 'shape') {
     const shapes: IShape[] = await db
@@ -179,8 +181,8 @@ const buildGeoJSON = async (
       shapes.map(async (shape) =>
         limit(async () => {
           const geojson = getGeoJSONByFormat(config, {
+            ...baseQuery,
             shape_id: shape.shape_id,
-            service_id: serviceIds,
           });
 
           if (!geojson) {
@@ -200,9 +202,7 @@ const buildGeoJSON = async (
       ),
     );
   } else if (config.outputType === 'route') {
-    const routes = getRoutes({
-      service_id: serviceIds,
-    });
+    const routes = getRoutes(baseQuery);
 
     const bar = progressBar(
       `${agencyKey}: Generating geoJSON {bar} {value}/{total}`,
@@ -217,8 +217,8 @@ const buildGeoJSON = async (
 
           const trips = getTrips(
             {
+              ...baseQuery,
               route_id: route.route_id,
-              service_id: serviceIds,
             },
             ['trip_headsign', 'direction_id'],
           );
@@ -227,9 +227,9 @@ const buildGeoJSON = async (
           await Promise.all(
             directions.map(async (direction) => {
               const geojson = getGeoJSONByFormat(config, {
+                ...baseQuery,
                 route_id: route.route_id,
                 direction_id: direction.direction_id,
-                service_id: serviceIds,
               });
 
               if (!geojson) {
@@ -276,9 +276,7 @@ const buildGeoJSON = async (
   } else if (config.outputType === 'agency') {
     config.log(`${agencyKey}: Generating geoJSON`);
 
-    const geojson = getGeoJSONByFormat(config, {
-      service_id: serviceIds,
-    });
+    const geojson = getGeoJSONByFormat(config, baseQuery);
     outputStats.files += 1;
     const fileName = `${agencyKey}.geojson`;
     const filePath = path.join(getExportPath(agencyKey), sanitize(fileName));
