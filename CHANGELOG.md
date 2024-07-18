@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix for fetching version
 
+### Updated
+- Dependency updates
+
 ## [3.7.4] - 2024-07-12
 
 ### Updated
