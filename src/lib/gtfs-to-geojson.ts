@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { readFileSync } from 'node:fs';
 import { rm, mkdir, writeFile } from 'node:fs/promises';
 
 import { clone, omit, uniqBy } from 'lodash-es';
@@ -30,6 +29,8 @@ import stops from './formats/stops.js';
 import stopsBuffer from './formats/stops-buffer.js';
 import stopsDissolved from './formats/stops-dissolved.js';
 
+import { version } from '../../package.json';
+
 interface IConfig {
   agencies: {
     agency_key: string;
@@ -56,10 +57,6 @@ interface IShape {
 }
 
 const limit = pLimit(20);
-
-const { version } = JSON.parse(
-  readFileSync(new URL('../../package.json', import.meta.url).pathname, 'utf8'),
-);
 
 const setDefaultConfig = (initialConfig: IConfig) => {
   const defaults = {
