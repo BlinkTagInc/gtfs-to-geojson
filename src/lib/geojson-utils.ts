@@ -55,6 +55,13 @@ const truncateGeoJSONDecimals = (geojson, config) => {
           (coordinate) =>
             truncateCoordinate(coordinate, config.coordinatePrecision),
         );
+      } else if (feature.geometry.type.toLowerCase() === 'multilinestring') {
+        feature.geometry.coordinates = feature.geometry.coordinates.map(
+          (linestring) =>
+            linestring.map((coordinate) =>
+              truncateCoordinate(coordinate, config.coordinatePrecision),
+            ),
+        );
       } else if (feature.geometry.type.toLowerCase() === 'polygon') {
         feature.geometry.coordinates = feature.geometry.coordinates.map(
           (line) =>
