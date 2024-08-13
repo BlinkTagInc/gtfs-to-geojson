@@ -1,5 +1,5 @@
 import { cloneDeep, flatMap, maxBy, omitBy, size } from 'lodash-es';
-import { feature, featureCollection } from '@turf/helpers';
+import { feature, featureCollection, round } from '@turf/helpers';
 import { featureEach } from '@turf/meta';
 import simplify from '@turf/simplify';
 import union from '@turf/union';
@@ -37,36 +37,39 @@ function formatProperties(properties) {
   return formattedProperties;
 }
 
-const truncateCoordinate = (coordinate, precision) => [
-  Math.round(coordinate[0] * 10 ** precision) / 10 ** precision,
-  Math.round(coordinate[1] * 10 ** precision) / 10 ** precision,
-];
-
+/*
+ * Truncate geojson coordinates to a specific number of decimal places.
+ */
 const truncateGeoJSONDecimals = (geojson, config) => {
   featureEach(geojson, (feature) => {
     if (feature.geometry.coordinates) {
       if (feature.geometry.type.toLowerCase() === 'point') {
-        feature.geometry.coordinates = truncateCoordinate(
-          feature.geometry.coordinates,
-          config.coordinatePrecision,
+        feature.geometry.coordinates = feature.geometry.coordinates.map(
+          (number) => round(number, config.coordinatePrecision),
         );
       } else if (feature.geometry.type.toLowerCase() === 'linestring') {
         feature.geometry.coordinates = feature.geometry.coordinates.map(
           (coordinate) =>
-            truncateCoordinate(coordinate, config.coordinatePrecision),
+            coordinate.map((number) =>
+              round(number, config.coordinatePrecision),
+            ),
         );
       } else if (feature.geometry.type.toLowerCase() === 'multilinestring') {
         feature.geometry.coordinates = feature.geometry.coordinates.map(
           (linestring) =>
             linestring.map((coordinate) =>
-              truncateCoordinate(coordinate, config.coordinatePrecision),
+              coordinate.map((number) =>
+                round(number, config.coordinatePrecision),
+              ),
             ),
         );
       } else if (feature.geometry.type.toLowerCase() === 'polygon') {
         feature.geometry.coordinates = feature.geometry.coordinates.map(
           (line) =>
             line.map((coordinate) =>
-              truncateCoordinate(coordinate, config.coordinatePrecision),
+              coordinate.map((number) =>
+                round(number, config.coordinatePrecision),
+              ),
             ),
         );
       } else if (feature.geometry.type.toLowerCase() === 'multipolygon') {
@@ -74,7 +77,9 @@ const truncateGeoJSONDecimals = (geojson, config) => {
           (polygon) =>
             polygon.map((line) =>
               line.map((coordinate) =>
-                truncateCoordinate(coordinate, config.coordinatePrecision),
+                coordinate.map((number) =>
+                  round(number, config.coordinatePrecision),
+                ),
               ),
             ),
         );
