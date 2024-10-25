@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - Updated logging functions
 - Return geojson paths
+- Dependency updates
 
 ## [3.7.7] - 2024-09-23
 
