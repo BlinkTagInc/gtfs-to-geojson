@@ -12,6 +12,8 @@ import {
   getTrips,
 } from 'gtfs';
 import toposort from 'toposort';
+import { logWarning } from './log-utils.js';
+import type { Config } from '../types/global_interfaces.js';
 
 function formatHexColor(color) {
   if (color === null || color === undefined) {
@@ -40,7 +42,7 @@ function formatProperties(properties) {
 /*
  * Truncate geojson coordinates to a specific number of decimal places.
  */
-const truncateGeoJSONDecimals = (geojson, config) => {
+const truncateGeoJSONDecimals = (geojson, config: Config) => {
   featureEach(geojson, (feature) => {
     if (feature.geometry.coordinates) {
       if (feature.geometry.type.toLowerCase() === 'point') {
@@ -100,7 +102,7 @@ export function mergeGeojson(...geojsons) {
 /*
  * Simplify geojson and truncate decimals to precision specified in config.
  */
-export function simplifyGeoJSON(geojson, config) {
+export function simplifyGeoJSON(geojson, config: Config) {
   if (config.coordinatePrecision === undefined) {
     return geojson;
   }
@@ -124,7 +126,7 @@ export function simplifyGeoJSON(geojson, config) {
 
     return truncateGeoJSONDecimals(simplifiedGeojson, config);
   } catch {
-    config.logWarning('Unable to simplify geojson');
+    logWarning(config)('Unable to simplify geojson');
 
     return truncateGeoJSONDecimals(geojson, config);
   }
@@ -140,7 +142,7 @@ export function stripNonAgencyProperties(geojson) {
   return geojson;
 }
 
-export function unionGeojson(geojson, config) {
+export function unionGeojson(geojson, config: Config) {
   if (geojson.features.length === 1) {
     return geojson;
   }
@@ -148,7 +150,7 @@ export function unionGeojson(geojson, config) {
   try {
     return union(featureCollection(geojson.features));
   } catch {
-    config.logWarning('Unable to dissolve geojson');
+    logWarning(config)('Unable to dissolve geojson');
     return geojson;
   }
 }

@@ -3,18 +3,20 @@ import turfConvex from '@turf/convex';
 import { featureEach } from '@turf/meta';
 
 import { simplifyGeoJSON } from '../geojson-utils.js';
+import { logWarning } from '../log-utils.js';
+import type { Config } from '../../types/global_interfaces.js';
 
-const convex = (config, query = {}) => {
+const convex = (config: Config, query = {}) => {
   const stops = getStopsAsGeoJSON(query);
   const geojson = turfConvex(stops);
 
   if (!geojson) {
     if (query.route_id && query.direction_id) {
-      config.logWarning(
+      logWarning(config)(
         `Unable to calculate convex hull for route: ${query.route_id} direction: ${query.direction_id}`,
       );
     } else {
-      config.logWarning('Unable to calculate convex hull');
+      logWarning(config)('Unable to calculate convex hull');
     }
     return null;
   }

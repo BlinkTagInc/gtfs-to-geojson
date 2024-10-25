@@ -10,14 +10,7 @@ import sanitize from 'sanitize-filename';
 
 import { getExportPath, zipFolder } from './file-utils.js';
 import { msToSeconds } from './formatters.js';
-import {
-  log,
-  logError,
-  logWarning,
-  generateLogText,
-  logStats,
-  progressBar,
-} from './log-utils.js';
+import { log, generateLogText, logStats, progressBar } from './log-utils.js';
 
 import envelope from './formats/envelope.js';
 import convex from './formats/convex.js';
@@ -31,34 +24,11 @@ import stopsDissolved from './formats/stops-dissolved.js';
 
 import { version } from '../../package.json';
 
-interface IConfig {
-  agencies: {
-    agency_key: string;
-    url?: string;
-    path?: string;
-    exclude?: string[];
-  }[];
-  bufferSizeMeters?: number;
-  coordinatePrecision?: number;
-  outputType?: string;
-  outputFormat?: string;
-  startDate?: string;
-  endDate?: string;
-  verbose?: boolean;
-  zipOutput?: boolean;
-  sqlitePath?: string;
-  log: (text: string) => void;
-  logWarning: (text: string) => void;
-  logError: (text: string) => void;
-}
-
-interface IShape {
-  shape_id: string;
-}
+import type { Config } from '../types/global_interfaces.js';
 
 const limit = pLimit(20);
 
-const setDefaultConfig = (initialConfig: IConfig) => {
+const setDefaultConfig = (initialConfig: Config) => {
   const defaults = {
     gtfsToGeoJSONVersion: version,
     bufferSizeMeters: 400,
@@ -67,9 +37,6 @@ const setDefaultConfig = (initialConfig: IConfig) => {
     skipImport: false,
     verbose: true,
     zipOutput: false,
-    log: log(initialConfig),
-    logWarning: logWarning(initialConfig),
-    logError: logError(initialConfig),
   };
 
   return Object.assign(defaults, initialConfig);
@@ -78,7 +45,7 @@ const setDefaultConfig = (initialConfig: IConfig) => {
 /*
  * Get a list of service_id for a specified date range
  */
-const getServiceIdsForDateRange = (config: IConfig) => {
+const getServiceIdsForDateRange = (config: Config) => {
   const db = openDb(config);
   let whereClause = '';
   const whereClauses = [];
@@ -102,7 +69,7 @@ const getServiceIdsForDateRange = (config: IConfig) => {
   );
 };
 
-const getGeoJSONByFormat = (config: IConfig, query = {}) => {
+const getGeoJSONByFormat = (config: Config, query = {}) => {
   if (config.outputFormat === 'envelope') {
     return envelope(config, query);
   }
@@ -146,7 +113,7 @@ const getGeoJSONByFormat = (config: IConfig, query = {}) => {
 
 const buildGeoJSON = async (
   agencyKey: string,
-  config: IConfig,
+  config: Config,
   outputStats: { files: number; shapes: number; routes: number },
 ) => {
   const db = openDb(config);
@@ -158,9 +125,9 @@ const buildGeoJSON = async (
   }
 
   if (config.outputType === 'shape') {
-    const shapes: IShape[] = await db
-      .prepare('SELECT DISTINCT shape_id FROM shapes')
-      .all();
+    const shapes: {
+      shape_id: string;
+    }[] = await db.prepare('SELECT DISTINCT shape_id FROM shapes').all();
 
     if (shapes.length === 0) {
       throw new Error(
@@ -271,7 +238,7 @@ const buildGeoJSON = async (
       ),
     );
   } else if (config.outputType === 'agency') {
-    config.log(`${agencyKey}: Generating geoJSON`);
+    log(config)(`${agencyKey}: Generating geoJSON`);
 
     const geojson = getGeoJSONByFormat(config, baseQuery);
     outputStats.files += 1;
@@ -285,7 +252,7 @@ const buildGeoJSON = async (
   }
 };
 
-const gtfsToGeoJSON = async (initialConfig: IConfig) => {
+const gtfsToGeoJSON = async (initialConfig: Config) => {
   const config = setDefaultConfig(initialConfig);
   const geojsonPaths = [];
 
@@ -354,12 +321,12 @@ const gtfsToGeoJSON = async (initialConfig: IConfig) => {
     const filePath = path.join(exportPath, 'log.txt');
     await writeFile(filePath, logText);
 
-    config.log(`GeoJSON for ${agencyKey} created at ${geojsonPath}`);
+    log(config)(`GeoJSON for ${agencyKey} created at ${geojsonPath}`);
 
-    logStats(outputStats, config);
+    logStats(config)(outputStats);
 
     timer.stop();
-    config.log(
+    log(config)(
       `GeoJSON generation required ${msToSeconds(timer.time())} seconds`,
     );
 

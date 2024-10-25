@@ -4,10 +4,12 @@ import { getFeedInfo } from 'gtfs';
 import { noop } from 'lodash-es';
 import Table from 'cli-table';
 
+import type { Config } from '../types/global_interfaces.js';
+
 /*
  * Creates text for a log of output details.
  */
-export function generateLogText(agency, outputStats, config) {
+export function generateLogText(agency, outputStats, config: Config) {
   const feedInfo = getFeedInfo();
   const feedVersion =
     feedInfo.length > 0 && feedInfo[0].feed_version
@@ -36,7 +38,7 @@ export function generateLogText(agency, outputStats, config) {
 /*
  * Returns a log function based on config settings
  */
-export function log(config) {
+export function log(config: Config) {
   if (config.verbose === false) {
     return noop;
   }
@@ -60,12 +62,12 @@ export function log(config) {
 /*
  * Returns an warning log function based on config settings
  */
-export function logWarning(config) {
+export function logWarning(config: Config) {
   if (config.logFunction) {
     return config.logFunction;
   }
 
-  return (text) => {
+  return (text: string) => {
     process.stdout.write(`\n${formatWarning(text)}\n`);
   };
 }
@@ -73,12 +75,12 @@ export function logWarning(config) {
 /*
  * Returns an error log function based on config settings
  */
-export function logError(config) {
+export function logError(config: Config) {
   if (config.logFunction) {
     return config.logFunction;
   }
 
-  return (text) => {
+  return (text: string) => {
     process.stdout.write(`\n${formatError(text)}\n`);
   };
 }
@@ -86,7 +88,7 @@ export function logError(config) {
 /*
  * Format console warning text
  */
-export function formatWarning(text) {
+export function formatWarning(text: string) {
   const warningMessage = `${colors.underline('Warning')}: ${text}`;
   return colors.yellow(warningMessage);
 }
@@ -94,7 +96,7 @@ export function formatWarning(text) {
 /*
  * Format console error text
  */
-export function formatError(error) {
+export function formatError(error: string | Error) {
   const messageText = error instanceof Error ? error.message : error;
   const errorMessage = `${colors.underline('Error')}: ${messageText.replace(
     'Error: ',
@@ -106,25 +108,27 @@ export function formatError(error) {
 /*
  * Print a table of stats to the console.
  */
-export function logStats(stats, config) {
+export function logStats(config: Config) {
   // Hide stats table from custom log functions
   if (config.logFunction) {
-    return;
+    return noop;
   }
 
-  const table = new Table({
-    colWidths: [40, 20],
-    head: ['Item', 'Count'],
-  });
+  return (stats) => {
+    const table = new Table({
+      colWidths: [40, 20],
+      head: ['Item', 'Count'],
+    });
 
-  table.push(
-    ['📝 Output Type', config.outputType],
-    ['🔄 Routes', stats.routes],
-    ['⎭ Shapes', stats.shapes],
-    ['📄 GeoJSON Files', stats.files],
-  );
+    table.push(
+      ['📝 Output Type', config.outputType],
+      ['🔄 Routes', stats.routes],
+      ['⎭ Shapes', stats.shapes],
+      ['📄 GeoJSON Files', stats.files],
+    );
 
-  config.log(table.toString());
+    log(config)(table.toString());
+  };
 }
 
 /*
@@ -191,17 +195,17 @@ export function progressBar(formatString: string, barTotal: number, config) {
       .replace('{total}', barTotal)
       .replace('{bar}', generateProgressBarString(barTotal, barProgress));
 
-  config.log(renderProgressString(), true);
+  log(config)(renderProgressString(), true);
 
   return {
     interrupt(text: string) {
       // Log two lines to avoid overwrite by progress bar
-      config.logWarning(text);
-      config.log('');
+      logWarning(config)(text);
+      log(config)('');
     },
     increment() {
       barProgress += 1;
-      config.log(renderProgressString(), true);
+      log(config)(renderProgressString(), true);
     },
   };
 }
