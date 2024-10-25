@@ -287,6 +287,7 @@ const buildGeoJSON = async (
 
 const gtfsToGeoJSON = async (initialConfig: IConfig) => {
   const config = setDefaultConfig(initialConfig);
+  const geojsonPaths = [];
 
   await openDb(config);
 
@@ -361,8 +362,12 @@ const gtfsToGeoJSON = async (initialConfig: IConfig) => {
     config.log(
       `GeoJSON generation required ${msToSeconds(timer.time())} seconds`,
     );
+
+    geojsonPaths.push(geojsonPath);
   }
   /* eslint-enable no-await-in-loop */
+
+  return geojsonPaths;
 };
 
 export default gtfsToGeoJSON;
