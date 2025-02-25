@@ -7,8 +7,17 @@ export interface Config {
   }[];
   bufferSizeMeters?: number;
   coordinatePrecision?: number;
-  outputType?: string;
-  outputFormat?: string;
+  outputType?: 'agency' | 'route' | 'shape';
+  outputFormat?:
+    | 'envelope'
+    | 'convex'
+    | 'stops'
+    | 'stops-buffer'
+    | 'stops-dissolved'
+    | 'lines'
+    | 'lines-buffer'
+    | 'lines-dissolved'
+    | 'lines-and-stops';
   startDate?: string;
   endDate?: string;
   verbose?: boolean;
