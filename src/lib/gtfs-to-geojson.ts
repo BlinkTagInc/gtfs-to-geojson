@@ -1,5 +1,7 @@
 import path from 'node:path';
 import { rm, mkdir, writeFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 import { clone, omit, uniqBy } from 'lodash-es';
 import { getRoutes, getTrips, openDb, importGtfs } from 'gtfs';
@@ -22,7 +24,12 @@ import stops from './formats/stops.js';
 import stopsBuffer from './formats/stops-buffer.js';
 import stopsDissolved from './formats/stops-dissolved.js';
 
-import { version } from '../../package.json';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const packageJson = JSON.parse(
+  readFileSync(path.join(__dirname, '../../package.json'), 'utf8'),
+);
+const { version } = packageJson;
 
 import type { Config } from '../types/global_interfaces.js';
 
