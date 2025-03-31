@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 - Rename agency_key to agencyKey
+- Return path to zipped file if zipOutput=true
 
 ## [3.7.11] - 2025-03-30
 

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { createWriteStream } from 'node:fs';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, stat, mkdir } from 'node:fs/promises';
 
 import archiver from 'archiver';
 import untildify from 'untildify';
@@ -36,15 +36,29 @@ export async function getConfig(argv) {
   return config;
 }
 
-export function zipFolder(exportPath) {
-  const output = createWriteStream(path.join(exportPath, 'geojson.zip'));
-  const archive = archiver('zip');
+export async function zipFolders(folderPaths: string[], exportPath: string) {
+  const zipFileName = 'geojson.zip';
+  const zipFilePath = path.join(exportPath, zipFileName);
 
-  return new Promise((resolve, reject) => {
-    output.on('close', resolve);
+  // Ensure export directory exists
+  await mkdir(exportPath, { recursive: true });
+
+  return new Promise<string>((resolve, reject) => {
+    const output = createWriteStream(zipFilePath);
+    const archive = archiver('zip');
+
+    // Handle events
+    output.on('close', () => resolve(zipFilePath));
     archive.on('error', reject);
+
+    // Pipe archive data to the output file
     archive.pipe(output);
-    archive.glob(`${exportPath}/**/*.{json}`);
+
+    // Add all JSON files from the provided folders
+    for (const folderPath of folderPaths) {
+      archive.glob('**/*.{json,geojson}', { cwd: folderPath });
+    }
+
     archive.finalize();
   });
 }

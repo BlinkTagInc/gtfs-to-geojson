@@ -8,7 +8,7 @@ import Timer from 'timer-machine';
 import sqlString from 'sqlstring-sqlite';
 import sanitize from 'sanitize-filename';
 
-import { getExportPath, zipFolder } from './file-utils.js';
+import { getExportPath, zipFolders } from './file-utils.js';
 import { msToSeconds } from './formatters.js';
 import { log, generateLogText, logStats, progressBar } from './log-utils.js';
 
@@ -308,15 +308,7 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
 
     await buildGeoJSON(agencyKey, config, outputStats);
 
-    // Zip output, if specified
-    if (config.zipOutput) {
-      await zipFolder(exportPath);
-    }
-
-    let geojsonPath = `${process.cwd()}/${exportPath}`;
-    if (config.zipOutput) {
-      geojsonPath += '/geojson.zip';
-    }
+    const geojsonPath = path.join(process.cwd(), exportPath);
 
     // Generate output log.txt
     const logText = generateLogText(agency, outputStats, config);
@@ -335,6 +327,23 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
     geojsonPaths.push(geojsonPath);
   }
   /* eslint-enable no-await-in-loop */
+
+  // Zip output, if specified in config
+  if (config.zipOutput) {
+    const zipExportPath = getExportPath(
+      config.agencies
+        .map((agency) => agency.agencyKey ?? agency.agency_key ?? 'unknown')
+        .join('-'),
+    );
+
+    await zipFolders(geojsonPaths, zipExportPath);
+
+    const zipFilePath = path.join(process.cwd(), zipExportPath, 'geojson.zip');
+
+    log(config)(`Zipped folder of GeoJSON created at ${zipFilePath}`);
+
+    return zipFilePath;
+  }
 
   return geojsonPaths;
 };
