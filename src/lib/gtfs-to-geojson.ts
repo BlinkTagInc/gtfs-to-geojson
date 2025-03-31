@@ -204,13 +204,13 @@ const buildGeoJSON = async (
               outputStats.files += 1;
               const fileNameComponents = [];
 
-              if (route.agency_id !== undefined) {
+              if (route.agency_id !== null) {
                 fileNameComponents.push(route.agency_id);
               }
 
               fileNameComponents.push(route.route_id);
 
-              if (direction.direction_id !== undefined) {
+              if (direction.direction_id !== null) {
                 fileNameComponents.push(direction.direction_id);
               }
 
