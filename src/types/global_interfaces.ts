@@ -1,6 +1,7 @@
 export interface Config {
   agencies: {
-    agency_key: string;
+    agencyKey: string;
+    agency_key?: string;
     url?: string;
     path?: string;
     exclude?: string[];

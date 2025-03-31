@@ -93,13 +93,7 @@ A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at
 
 ### agencies
 
-{Array} Specify the GTFS files to be imported in an `agencies` array. GTFS files can be imported via a `url` or a local `path`.
-
-Each file needs an `agency_key`, a short name you create that is specific to that GTFS file. For GTFS files that contain more than one agency, you only need to list each GTFS file once in the `agencies` array, not once per agency that it contains.
-
-To find an agency's GTFS file, visit [transitfeeds.com](http://transitfeeds.com). You can use the
-URL from the agency's website or you can use a URL generated from the transitfeeds.com
-API along with your API token.
+{Array} Specify the GTFS files to be imported in an `agencies` array. GTFS files can be imported via a `url` or a local `path`. Each agency needs an `agencyKey`, a unique identifier for the GTFS file.
 
 - Specify a download URL:
 
@@ -107,7 +101,7 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "county-connection",
+      "agencyKey": "county-connection",
       "url": "http://cccta.org/GTFS/google_transit.zip"
     }
   ]
@@ -120,7 +114,7 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "myAgency",
+      "agencyKey": "myAgency",
       "path": "/path/to/the/gtfs.zip"
     }
   ]
@@ -133,7 +127,7 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "myAgency",
+      "agencyKey": "myAgency",
       "path": "/path/to/the/unzipped/gtfs/"
     }
   ]
@@ -146,11 +140,11 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "myAgency",
+      "agencyKey": "myAgency",
       "path": "/path/to/the/gtfs.zip"
     },
     {
-      "agency_key": "otherAgency",
+      "agencyKey": "otherAgency",
       "path": "/path/to/the/othergtfs.zip"
     }
   ]
@@ -163,7 +157,7 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "myAgency",
+      "agencyKey": "myAgency",
       "path": "/path/to/the/unzipped/gtfs/",
       "exclude": ["shapes", "stops"]
     }
@@ -177,7 +171,7 @@ API along with your API token.
 {
   "agencies": [
     {
-      "agency_key": "myAgency",
+      "agencyKey": "myAgency",
       "path": "/path/to/the/unzipped/gtfs/",
       "proj": "+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +a=6378249.2 +b=6356515 +towgs84=-168,-60,320,0,0,0,0 +pm=paris +units=m +no_defs"
     }
@@ -287,7 +281,7 @@ By default, `gtfs-to-geojson` will look for a `config.json` file in the project 
 
     gtfs-to-geojson --configPath /path/to/your/custom-config.json
 
-This will download the GTFS file specified in `config.js` . Then, `gtfs-to-geojson` will create geoJSON and save it to `geojson/:agency_key`.
+This will download the GTFS file specified in `config.js` . Then, `gtfs-to-geojson` will create geoJSON and save it to `geojson/:agencyKey`.
 
 ### Options
 

@@ -270,7 +270,8 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
       files: 0,
     };
 
-    const agencyKey = agency.agency_key;
+    const agencyKey = agency.agencyKey ?? agency.agency_key ?? 'unknown';
+
     const exportPath = getExportPath(agencyKey);
 
     // Exclude files that are not needed for GeoJSON creation
