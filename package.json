@@ -50,6 +50,7 @@
     "sqlstring-sqlite": "^0.1.1",
     "timer-machine": "^1.1.0",
     "toposort": "^2.0.2",
+    "untildify": "^5.0.0",
     "yargs": "^17.7.2",
     "yoctocolors": "^2.1.1"
   },

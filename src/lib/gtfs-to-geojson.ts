@@ -7,8 +7,8 @@ import pLimit from 'p-limit';
 import Timer from 'timer-machine';
 import sqlString from 'sqlstring-sqlite';
 import sanitize from 'sanitize-filename';
-
-import { getExportPath, zipFolders } from './file-utils.js';
+import untildify from 'untildify';
+import { getOutputPath, prepDirectory, zipFolders } from './file-utils.js';
 import { msToSeconds } from './formatters.js';
 import { log, generateLogText, logStats, progressBar } from './log-utils.js';
 
@@ -35,6 +35,7 @@ const setDefaultConfig = (initialConfig: Config) => {
     bufferSizeMeters: 400,
     outputType: 'agency',
     outputFormat: 'lines-and-stops',
+    overwriteExistingFiles: true,
     skipImport: false,
     verbose: true,
     zipOutput: false,
@@ -115,6 +116,7 @@ const getGeoJSONByFormat = (config: Config, query = {}) => {
 const buildGeoJSON = async (
   agencyKey: string,
   config: Config,
+  outputPath: string,
   outputStats: { files: number; shapes: number; routes: number },
 ) => {
   const db = openDb(config);
@@ -157,10 +159,7 @@ const buildGeoJSON = async (
           outputStats.files += 1;
           outputStats.shapes += 1;
           const fileName = `${shape.shape_id}.geojson`;
-          const filePath = path.join(
-            getExportPath(agencyKey),
-            sanitize(fileName),
-          );
+          const filePath = path.join(outputPath, sanitize(fileName));
           await writeFile(filePath, JSON.stringify(geojson));
           bar.increment();
         }),
@@ -226,10 +225,7 @@ const buildGeoJSON = async (
 
               const fileName = `${fileNameComponents.join('_')}.geojson`;
 
-              const filePath = path.join(
-                getExportPath(agencyKey),
-                sanitize(fileName),
-              );
+              const filePath = path.join(outputPath, sanitize(fileName));
               await writeFile(filePath, JSON.stringify(geojson));
             }),
           );
@@ -244,7 +240,7 @@ const buildGeoJSON = async (
     const geojson = getGeoJSONByFormat(config, baseQuery);
     outputStats.files += 1;
     const fileName = `${agencyKey}.geojson`;
-    const filePath = path.join(getExportPath(agencyKey), sanitize(fileName));
+    const filePath = path.join(outputPath, sanitize(fileName));
     await writeFile(filePath, JSON.stringify(geojson));
   } else {
     throw new Error(
@@ -272,7 +268,11 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
 
     const agencyKey = agency.agencyKey ?? agency.agency_key ?? 'unknown';
 
-    const exportPath = getExportPath(agencyKey);
+    const outputPath = getOutputPath(agencyKey, config);
+
+    timer.start();
+
+    await prepDirectory(outputPath, config);
 
     // Exclude files that are not needed for GeoJSON creation
     agency.exclude = [
@@ -303,19 +303,14 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
       await importGtfs(agencyConfig);
     }
 
-    await rm(exportPath, { recursive: true, force: true });
-    await mkdir(exportPath, { recursive: true });
-
-    await buildGeoJSON(agencyKey, config, outputStats);
-
-    const geojsonPath = path.join(process.cwd(), exportPath);
+    await buildGeoJSON(agencyKey, config, outputPath, outputStats);
 
     // Generate output log.txt
     const logText = generateLogText(agency, outputStats, config);
-    const filePath = path.join(exportPath, 'log.txt');
+    const filePath = path.join(outputPath, 'log.txt');
     await writeFile(filePath, logText);
 
-    log(config)(`GeoJSON for ${agencyKey} created at ${geojsonPath}`);
+    log(config)(`GeoJSON for ${agencyKey} created at ${outputPath}`);
 
     logStats(config)(outputStats);
 
@@ -324,21 +319,22 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
       `GeoJSON generation required ${msToSeconds(timer.time())} seconds`,
     );
 
-    geojsonPaths.push(geojsonPath);
+    geojsonPaths.push(outputPath);
   }
   /* eslint-enable no-await-in-loop */
 
   // Zip output, if specified in config
   if (config.zipOutput) {
-    const zipExportPath = getExportPath(
+    const outputPath = getOutputPath(
       config.agencies
         .map((agency) => agency.agencyKey ?? agency.agency_key ?? 'unknown')
         .join('-'),
+      config,
     );
 
-    await zipFolders(geojsonPaths, zipExportPath);
+    await zipFolders(geojsonPaths, outputPath);
 
-    const zipFilePath = path.join(process.cwd(), zipExportPath, 'geojson.zip');
+    const zipFilePath = path.join(process.cwd(), outputPath, 'geojson.zip');
 
     log(config)(`Zipped folder of GeoJSON created at ${zipFilePath}`);
 

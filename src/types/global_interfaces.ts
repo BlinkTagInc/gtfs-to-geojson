@@ -19,6 +19,8 @@ export interface Config {
     | 'lines-buffer'
     | 'lines-dissolved'
     | 'lines-and-stops';
+  outputPath?: string;
+  overwriteExistingFiles?: boolean;
   startDate?: string;
   endDate?: string;
   verbose?: boolean;

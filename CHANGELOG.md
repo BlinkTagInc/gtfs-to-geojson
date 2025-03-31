@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - Avoid blank components to export file names
 
+### Added
+- outputPath config option
+
 ## [3.8.0] - 2025-03-30
 
 ### Updated

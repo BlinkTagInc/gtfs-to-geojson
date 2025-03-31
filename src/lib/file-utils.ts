@@ -1,10 +1,12 @@
 import path from 'node:path';
+import { access, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
-import { readFile, mkdir } from 'node:fs/promises';
 
 import archiver from 'archiver';
 import untildify from 'untildify';
 import sanitize from 'sanitize-filename';
+
+import { Config } from '../types/global_interfaces.js';
 
 /*
  * Attempt to parse the specified config JSON file.
@@ -36,6 +38,9 @@ export async function getConfig(argv) {
   return config;
 }
 
+/*
+ * Zip the specified folders into a single zip file.
+ */
 export async function zipFolders(folderPaths: string[], exportPath: string) {
   const zipFileName = 'geojson.zip';
   const zipFilePath = path.join(exportPath, zipFileName);
@@ -63,6 +68,46 @@ export async function zipFolders(folderPaths: string[], exportPath: string) {
   });
 }
 
-export function getExportPath(agencyKey) {
-  return path.join('geojson', sanitize(agencyKey));
+/*
+ * Prepare the outputPath directory for writing geojson files.
+ */
+export async function prepDirectory(outputPath: string, config: Config) {
+  // Check if outputPath exists
+  try {
+    await access(outputPath);
+  } catch (error: any) {
+    try {
+      await mkdir(outputPath, { recursive: true });
+    } catch (error: any) {
+      if (error?.code === 'ENOENT') {
+        throw new Error(
+          `Unable to write to ${outputPath}. Try running this command from a writable directory.`,
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  // Check if outputPath is empty
+  const files = await readdir(outputPath);
+  if (config.overwriteExistingFiles === false && files.length > 0) {
+    throw new Error(
+      `Output directory ${outputPath} is not empty. Please specify an empty directory.`,
+    );
+  }
+
+  // Delete all files in outputPath if `overwriteExistingFiles` is true
+  if (config.overwriteExistingFiles === true) {
+    await rm(path.join(outputPath, '*'), { recursive: true, force: true });
+  }
+}
+
+/*
+ * Get the output path for the GeoJSON files.
+ */
+export function getOutputPath(agencyKey: string, config: Config) {
+  return config.outputPath
+    ? untildify(config.outputPath)
+    : path.join(process.cwd(), 'geojson', sanitize(agencyKey));
 }
