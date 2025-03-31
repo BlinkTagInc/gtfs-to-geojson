@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { access, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
+import { once } from 'node:events';
 
 import archiver from 'archiver';
 import untildify from 'untildify';
@@ -48,24 +49,29 @@ export async function zipFolders(folderPaths: string[], exportPath: string) {
   // Ensure export directory exists
   await mkdir(exportPath, { recursive: true });
 
-  return new Promise<string>((resolve, reject) => {
-    const output = createWriteStream(zipFilePath);
-    const archive = archiver('zip');
+  const output = createWriteStream(zipFilePath);
+  const archive = archiver('zip');
 
-    // Handle events
-    output.on('close', () => resolve(zipFilePath));
-    archive.on('error', reject);
+  archive.pipe(output);
 
-    // Pipe archive data to the output file
-    archive.pipe(output);
+  // Add all JSON files from the provided folders, preserving folder structure
+  for (const folderPath of folderPaths) {
+    const folderName = path.basename(folderPath);
+    // Use directory to maintain folder structure
+    archive.directory(folderPath, folderName, (entry) => {
+      // Only include .json and .geojson files
+      return entry.name.match(/\.(json|geojson)$/i) ? entry : false;
+    });
+  }
 
-    // Add all JSON files from the provided folders
-    for (const folderPath of folderPaths) {
-      archive.glob('**/*.{json,geojson}', { cwd: folderPath });
-    }
+  archive.finalize();
 
-    archive.finalize();
-  });
+  try {
+    await once(output, 'close');
+    return zipFilePath;
+  } catch (error: any) {
+    throw new Error(`Failed to create zip file: ${error.message}`);
+  }
 }
 
 /*
