@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Updated
+- Change to package.json version import
 - Dependency updates
 - Remove package-lock.json
 
