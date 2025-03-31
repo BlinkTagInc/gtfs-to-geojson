@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 - Avoid blank components to export file names
+- Use agency from GTFS as fallback agencyKey
 
 ### Added
 - outputPath config option
