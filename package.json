@@ -54,6 +54,7 @@
     "yoctocolors": "^2.1.1"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.13.14",
     "@types/timer-machine": "^1.1.3",

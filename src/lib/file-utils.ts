@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { createWriteStream } from 'node:fs';
-import { readFile, stat, mkdir } from 'node:fs/promises';
+import { readFile, mkdir } from 'node:fs/promises';
 
 import archiver from 'archiver';
 import untildify from 'untildify';
@@ -65,8 +65,4 @@ export async function zipFolders(folderPaths: string[], exportPath: string) {
 
 export function getExportPath(agencyKey) {
   return path.join('geojson', sanitize(agencyKey));
-}
-
-export async function checkFileExists(filePath) {
-  return !!(await stat(filePath).catch((e) => false));
 }
