@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Handle outputType=shape with date filter
 
+### Updated
+- Dependency updates
+
 ## [3.8.3] - 2025-05-28
 ### Updated
 - Dependency updates
