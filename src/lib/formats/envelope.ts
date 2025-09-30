@@ -6,6 +6,11 @@ import { getRouteLinesAsGeoJSON, simplifyGeoJSON } from '../geojson-utils.js';
 
 const envelope = (config, query = {}) => {
   const lines = getRouteLinesAsGeoJSON(query);
+
+  if (!lines) {
+    return null;
+  }
+
   const geojson = bboxPoly(bbox(lines));
 
   featureEach(geojson, (feature) => {

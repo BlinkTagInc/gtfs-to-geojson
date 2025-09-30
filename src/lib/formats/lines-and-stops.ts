@@ -8,6 +8,11 @@ import {
 
 const linesAndStops = (config, query = {}) => {
   const shapesGeojson = getRouteLinesAsGeoJSON(query);
+
+  if (!shapesGeojson) {
+    return null;
+  }
+
   const stopsGeojson = getStopsAsGeoJSON(query);
   const geojson = mergeGeojson(shapesGeojson, stopsGeojson);
 

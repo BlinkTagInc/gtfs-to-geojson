@@ -200,11 +200,9 @@ export function getRouteLinesAsGeoJSON(query) {
     return geojson;
   }
 
-  // Fall back to using stops if no shapes are available
+  // If query has a specific shape_id which is not found, ignore.
   if (query.shape_id) {
-    throw new Error(
-      'No shapes found in shapes.txt, unable to create geoJSON with outputType = shape',
-    );
+    return null;
   }
 
   // Get a single route or all routes depending on query

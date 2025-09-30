@@ -8,6 +8,11 @@ import {
 
 const linesDissolved = (config, query = {}) => {
   const lines = getRouteLinesAsGeoJSON(query);
+
+  if (!lines) {
+    return null;
+  }
+
   const bufferedLines = buffer(lines, config.bufferSizeMeters, {
     units: 'meters',
   });

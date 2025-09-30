@@ -1,9 +1,13 @@
 import { getRouteLinesAsGeoJSON, simplifyGeoJSON } from '../geojson-utils.js';
 
 const lines = (config, query = {}) => {
-  const geojson = getRouteLinesAsGeoJSON(query);
+  const lines = getRouteLinesAsGeoJSON(query);
 
-  return simplifyGeoJSON(geojson, config);
+  if (!lines) {
+    return null;
+  }
+
+  return simplifyGeoJSON(lines, config);
 };
 
 export default lines;
