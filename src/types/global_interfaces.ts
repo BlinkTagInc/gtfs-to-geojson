@@ -1,11 +1,15 @@
-export interface Config {
-  agencies: {
-    agencyKey: string;
-    agency_key?: string;
-    url?: string;
-    path?: string;
-    exclude?: string[];
-  }[];
+import type {
+  Config as NodeGtfsConfig,
+  ConfigAgency as NodeGtfsConfigAgency,
+} from 'gtfs';
+
+export type ConfigAgency = NodeGtfsConfigAgency & {
+  agencyKey?: string;
+  agency_key?: string;
+};
+
+export type Config = Omit<NodeGtfsConfig, 'agencies'> & {
+  agencies: ConfigAgency[];
   bufferSizeMeters?: number;
   coordinatePrecision?: number;
   outputType?: 'agency' | 'route' | 'shape';
@@ -25,6 +29,4 @@ export interface Config {
   endDate?: string;
   verbose?: boolean;
   zipOutput?: boolean;
-  sqlitePath?: string;
-  logFunction?: (text: string) => void;
-}
+};
