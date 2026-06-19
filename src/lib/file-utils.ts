@@ -3,7 +3,7 @@ import { access, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
 import { once } from 'node:events';
 
-import archiver from 'archiver';
+import { ZipArchive } from 'archiver';
 import untildify from 'untildify';
 import sanitize from 'sanitize-filename';
 
@@ -50,7 +50,7 @@ export async function zipFolders(folderPaths: string[], exportPath: string) {
   await mkdir(exportPath, { recursive: true });
 
   const output = createWriteStream(zipFilePath);
-  const archive = archiver('zip');
+  const archive = new ZipArchive();
 
   archive.pipe(output);
 

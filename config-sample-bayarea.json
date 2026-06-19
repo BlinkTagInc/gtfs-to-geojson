@@ -73,6 +73,10 @@
       "url": "http://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip"
     },
     {
+      "agencyKey": "sanleandro",
+      "url": "http://api.511.org/transit/datafeeds?operator_id=SL&api_key=3521fe85-8498-4ecd-8bc4-3c0e6491e32c"
+    },
+    {
       "agencyKey": "samtrans",
       "url": "http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip"
     },
