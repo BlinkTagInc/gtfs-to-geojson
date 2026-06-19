@@ -1,13 +1,15 @@
 import path from 'node:path';
+import { homedir } from 'node:os';
 import { access, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
 import { once } from 'node:events';
 
 import { ZipArchive } from 'archiver';
-import untildify from 'untildify';
 import sanitize from 'sanitize-filename';
 
 import { Config } from '../types/global_interfaces.js';
+
+const homeDirectory = homedir();
 
 /*
  * Attempt to parse the specified config JSON file.
@@ -116,4 +118,15 @@ export function getOutputPath(agencyKey: string, config: Config) {
   return config.outputPath
     ? untildify(config.outputPath)
     : path.join(process.cwd(), 'geojson', sanitize(agencyKey));
+}
+
+/**
+ * Converts a tilde path to a full path
+ * @param pathWithTilde The path to convert
+ * @returns The full path
+ */
+export function untildify(pathWithTilde: string): string {
+  return homeDirectory
+    ? pathWithTilde.replace(/^~(?=$|\/|\\)/, homeDirectory)
+    : pathWithTilde;
 }
