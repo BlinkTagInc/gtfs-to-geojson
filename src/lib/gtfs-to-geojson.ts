@@ -255,7 +255,6 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
 
   await openDb(config);
 
-  /* eslint-disable no-await-in-loop */
   for (const agency of config.agencies) {
     const timer = new Timer();
     timer.start();
@@ -331,7 +330,6 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
     geojsonPaths.push(outputPath);
     agencyKeys.push(agencyKey);
   }
-  /* eslint-enable no-await-in-loop */
 
   // Zip output, if specified in config
   if (config.zipOutput) {
