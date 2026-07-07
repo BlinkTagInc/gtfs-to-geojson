@@ -23,16 +23,30 @@ function formatHexColor(color) {
   return `#${color}`;
 }
 
-function formatProperties(properties) {
-  const formattedProperties = {
-    ...cloneDeep(omitBy(properties, (value) => value === null)),
-    route_color: formatHexColor(properties.route_color),
-    route_text_color: formatHexColor(properties.route_text_color),
-  };
+/**
+ * Formats properties object by cleaning null values and formatting colors
+ * @param {Record<string, unknown>} properties - Properties object to format
+ * @returns {Record<string, unknown>} Formatted properties object
+ */
+function formatProperties(
+  properties: Record<string, unknown>,
+): Record<string, unknown> {
+  const formattedProperties = omitBy(properties, (value) => value == null);
 
-  if (properties.routes) {
-    formattedProperties.routes = properties.routes.map((route) =>
-      formatProperties(route),
+  const formattedRouteColor = formatHexColor(properties.route_color);
+  const formattedRouteTextColor = formatHexColor(properties.route_text_color);
+
+  if (formattedRouteColor) {
+    formattedProperties.route_color = formattedRouteColor;
+  }
+
+  if (formattedRouteTextColor) {
+    formattedProperties.route_text_color = formattedRouteTextColor;
+  }
+
+  if (properties.routes && Array.isArray(properties.routes)) {
+    formattedProperties.routes = properties.routes.map(
+      (route: Record<string, unknown>) => formatProperties(route),
     );
   }
 
