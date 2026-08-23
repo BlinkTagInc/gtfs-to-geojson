@@ -3,6 +3,7 @@ import { feature, featureCollection, round } from '@turf/helpers';
 import { featureEach } from '@turf/meta';
 import simplify from '@turf/simplify';
 import union from '@turf/union';
+import type { FeatureCollection } from 'geojson';
 import {
   getRouteAttributes,
   getRoutes,
@@ -109,7 +110,9 @@ const truncateGeoJSONDecimals = (geojson, config: Config) => {
 /*
  * Merge any number of geojson objects into one. Only works for `FeatureCollection`.
  */
-export function mergeGeojson(...geojsons) {
+export function mergeGeojson(
+  ...geojsons: FeatureCollection[]
+): FeatureCollection {
   return featureCollection(flatMap(geojsons, (geojson) => geojson.features));
 }
 
@@ -206,7 +209,7 @@ function getOrderedStopIdsForRoute(routeId) {
   return longestTrip.stoptimes.map((stoptime) => stoptime.stop_id);
 }
 
-export function getRouteLinesAsGeoJSON(query) {
+export function getRouteLinesAsGeoJSON(query): FeatureCollection | null {
   const geojson = getShapesAsGeoJSON(query);
 
   // Use shapes from shapes.txt if available

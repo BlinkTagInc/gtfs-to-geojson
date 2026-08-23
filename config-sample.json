@@ -13,6 +13,6 @@
   "overwriteExistingFiles": true,
   "startDate": "20240301",
   "endDate": "20240331",
-  "verbose": true,
+  "logLevel": "info",
   "zipOutput": false
 }
