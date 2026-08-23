@@ -35,11 +35,20 @@ export function generateLogText(agency, outputStats, config: Config) {
   return logText.join('\n');
 }
 
+function getLogLevel(config: Config): LogLevel {
+  if (config.logLevel !== undefined) {
+    return config.logLevel;
+  }
+
+  return config.verbose === false ? 'warning' : 'info';
+}
+
 /*
  * Returns a log function based on config settings
  */
 export function log(config: Config) {
-  if (config.verbose === false) {
+  const logLevel = getLogLevel(config);
+  if (logLevel === 'silent') {
     return noop;
   }
 
@@ -175,7 +184,8 @@ const generateProgressBarString = (barTotal, barProgress, size = 40) => {
 export function progressBar(formatString: string, barTotal: number, config) {
   let barProgress = 0;
 
-  if (config.verbose === false) {
+  const logLevel = getLogLevel(config);
+  if (logLevel === 'silent') {
     return {
       increment: noop,
       interrupt: noop,

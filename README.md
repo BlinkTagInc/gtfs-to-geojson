@@ -27,7 +27,6 @@
 
 `gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data. If you are looking to generate HTML timetables in addition to maps, check out the [gtfs-to-html](https://github.com/BlinkTagInc/gtfs-to-html) project. If you'd like to make a cool stringline chart of all trips on a route throughout the day, check out the [gtfs-to-chart](https://github.com/BlinkTagInc/gtfs-to-chart) project.
 
-
 ### GTFS-to-geojson on the web
 
 You can now use gtfs-to-geojson without actually downloading any code or doing any configuration. geojson.gtfstohtml.com provides a web based interface for generating GeoJSON from GTFS. It allows uploading a zipped GTFS file or specifying a URL to a GTFS file.
@@ -62,15 +61,15 @@ If you are using this as a node module as part of an application, you can includ
 ### Code example
 
 ```js
-import gtfsToGeoJSON from 'gtfs-to-geojson';
-import { readFile } from 'fs/promises';
+import gtfsToGeoJSON from "gtfs-to-geojson";
+import { readFile } from "fs/promises";
 const config = JSON.parse(
-  await readFile(new URL('./config.json', import.meta.url))
+  await readFile(new URL("./config.json", import.meta.url)),
 );
 
 gtfsToGeoJSON(config)
   .then(() => {
-    console.log('GeoJSON Generation Successful');
+    console.log("GeoJSON Generation Successful");
   })
   .catch((err) => {
     console.error(err);
@@ -86,16 +85,16 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at `config-sample-bayarea.json`. It is used generate data for the map on [bayareatransitmap.com](https://bayareatransitmap.com).
 
 | option                                        | type    | description                                                                                                                                                                                                        |
-| --------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| --------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- | --------------------------------------- |
 | [`agencies`](#agencies)                       | array   | An array of GTFS files to be imported.                                                                                                                                                                             |
 | [`bufferSizeMeters`](#buffersizemeters)       | integer | Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile).                                                                                                                                          |
 | [`coordinatePrecision`](#coordinateprecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional.                                                                                         |
 | [`endDate`](#enddate)                         | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.                                                                                        |
+| `logLevel`                                    | string  | `info`                                                                                                                                                                                                             | all operations | `silent`, `error`, `warning`, or `info` |
 | [`outputType`](#outputtype)                   | string  | The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to "agency".                                                                                                             |
 | [`outputFormat`](#outputformat)               | string  | The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops". |
 | [`startDate`](#startdate)                     | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.                                                                                        |
 | [`sqlitePath`](#sqlitepath)                   | string  | A path to an SQLite database. Optional, defaults to using an in-memory database.                                                                                                                                   |
-| [`verbose`](#verbose)                         | boolean | Whether or not to print output to the console. Optional, defaults to true.                                                                                                                                         |
 | [`zipOutput`](#zipoutput)                     | boolean | Whether or not to zip the output into one zip file. Optional, defaults to false.                                                                                                                                   |
 
 ### agencies
@@ -210,6 +209,13 @@ A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at
     "endDate": "20240401"
 ```
 
+### logLevel
+
+`logLevel` accepts `silent`, `error`, `warning`, or `info`. Errors and warnings
+use stderr; normal status output uses stdout.
+
+`verbose` remains available for compatibility. Use `logLevel` in new code.
+
 ### outputType
 
 {String} The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to `agency`.
@@ -230,16 +236,16 @@ A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at
 
 Only stops which are used in one or more routes will be output in geoJSON.
 
-| Format            | Type | Description                                 | Example                                                                                                                   | geoJSON                                                                                                                |
-| ----------------- | ----------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `envelope`        | Polygon | A rectangular box around route lines.       | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/envelope.png">        | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/envelope.geojson)               |
-| `convex`          | Polygon | A convex polygon around route endpoints.    | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/convex.png">          | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/convex.geojson)                   |
-| `stops`           | Points | Stops as points.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops.png">           | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops.geojson)                     |
-| `stops-buffer`    | Polygons | A buffer around stops.                      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-buffer.png">    | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-buffer.geojson)       |
-| `stops-dissolved` | Polygons | A dissolved buffer around stops.            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-dissolved.geojson) |
-| `lines`           | MultiLineStrings | Routes as lines.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines.png">           | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines.geojson)                     |
-| `lines-buffer`    | Polygons | A buffer around route lines.                | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-buffer.png">    | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-buffer.geojson)       |
-| `lines-dissolved` | Polygons | A dissolved buffer around route lines.      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-dissolved.geojson) |
+| Format            | Type                        | Description                                 | Example                                                                                                                   | geoJSON                                                                                                                |
+| ----------------- | --------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `envelope`        | Polygon                     | A rectangular box around route lines.       | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/envelope.png">        | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/envelope.geojson)               |
+| `convex`          | Polygon                     | A convex polygon around route endpoints.    | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/convex.png">          | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/convex.geojson)                   |
+| `stops`           | Points                      | Stops as points.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops.png">           | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops.geojson)                     |
+| `stops-buffer`    | Polygons                    | A buffer around stops.                      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-buffer.png">    | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-buffer.geojson)       |
+| `stops-dissolved` | Polygons                    | A dissolved buffer around stops.            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-dissolved.geojson) |
+| `lines`           | MultiLineStrings            | Routes as lines.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines.png">           | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines.geojson)                     |
+| `lines-buffer`    | Polygons                    | A buffer around route lines.                | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-buffer.png">    | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-buffer.geojson)       |
+| `lines-dissolved` | Polygons                    | A dissolved buffer around route lines.      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-dissolved.geojson) |
 | `lines-and-stops` | Points and MultiLineStrings | Both points and lines for stops and routes. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-and-stops.png"> | [lines-and-stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-and-stops.geojson) |
 
 ```
@@ -260,14 +266,6 @@ Only stops which are used in one or more routes will be output in geoJSON.
 
 ```
     "startDate": "20240301"
-```
-
-### verbose
-
-{Boolean} If you don't want the import script to print any output to the console, you can set `verbose` to `false`. Defaults to `true`.
-
-```
-    "verbose": false
 ```
 
 ### zipOutput

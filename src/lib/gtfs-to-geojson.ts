@@ -36,7 +36,7 @@ const setDefaultConfig = (initialConfig: Config) => {
     outputFormat: 'lines-and-stops',
     overwriteExistingFiles: true,
     skipImport: false,
-    verbose: true,
+    logLevel: 'info',
     zipOutput: false,
   };
 

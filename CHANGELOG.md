@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 - Dependency updates
+- Updates for logLevel config option
 
 ## [3.8.7] - 2026-07-07
 

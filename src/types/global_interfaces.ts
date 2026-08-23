@@ -12,6 +12,7 @@ export type Config = Omit<NodeGtfsConfig, 'agencies'> & {
   agencies: ConfigAgency[];
   bufferSizeMeters?: number;
   coordinatePrecision?: number;
+  logLevel?: boolean;
   outputType?: 'agency' | 'route' | 'shape';
   outputFormat?:
     | 'envelope'
