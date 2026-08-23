@@ -1,4 +1,4 @@
 allowBuilds:
   better-sqlite3: true
 minimumReleaseAgeExclude:
-  - gtfs@4.19.3
+  - gtfs@4.21.0
