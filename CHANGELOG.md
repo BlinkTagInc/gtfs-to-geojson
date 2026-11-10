@@ -5,66 +5,87 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Updated
+
+- Dependency updates
+
 ## [3.8.8] - 2026-08-22
 
 ### Updated
+
 - Dependency updates
 - Updates for logLevel config option
 
 ## [3.8.7] - 2026-07-07
 
 ### Updated
+
 - Dependency updates
 - Removed eslint and untildify
 
 ### Fixed
+
 - Fix for geojson shapes bug
 
 ## [3.8.6] - 2026-06-18
 
 ### Updated
+
 - Dependency updates
 - Switch to tsdown
 
 ## [3.8.5] - 2026-01-21
 
 ### Updated
+
 - Dependency updates
 
-
 ## [3.8.4] - 2025-09-30
+
 ### Fixed
+
 - Handle outputType=shape with date filter
 
 ### Updated
+
 - Dependency updates
 
 ## [3.8.3] - 2025-05-28
+
 ### Updated
+
 - Dependency updates
 
 ## [3.8.2] - 2025-04-17
+
 ### Updated
+
 - Dependency updates
 
 ## [3.8.1] - 2025-03-31
 
 ### Updated
+
 - Avoid blank components to export file names
 - Use agency from GTFS as fallback agencyKey
 
 ### Added
+
 - outputPath config option
 
 ## [3.8.0] - 2025-03-30
 
 ### Updated
+
 - Rename agency_key to agencyKey
 - Return path to zipped file if zipOutput=true
 
 ## [3.7.11] - 2025-03-30
 
 ### Updated
+
 - Change to package.json version import
 - Dependency updates
 - Remove package-lock.json
@@ -72,16 +93,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.7.10] - 2025-02-25
 
 ### Updated
+
 - Dependency updates
 
 ## [3.7.9] - 2024-11-18
 
 ### Updated
+
 - Dependency updates
 
 ## [3.7.8] - 2024-10-24
 
 ### Updated
+
 - Updated logging functions
 - Return geojson paths
 - Dependency updates
@@ -89,32 +113,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.7.7] - 2024-09-23
 
 ### Updated
+
 - Added release-it build hook
 - Dependency updates
 
 ## [3.7.6] - 2024-08-03
 
 ### Updated
+
 - Dependency updates
 - Updates to handle lines as MultiLineString
 
 ## [3.7.5] - 2024-07-18
 
 ### Fixed
+
 - Fix for fetching version
 
 ### Updated
+
 - Dependency updates
 
 ## [3.7.4] - 2024-07-12
 
 ### Updated
+
 - Handle GTFS with no calendars
 - Dependency updates
 
 ## [3.7.3] - 2024-06-22
 
 ### Updated
+
 - Typescript
 
 ## [3.7.2] - 2024-06-19
@@ -128,9 +158,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Fixed
 
- - Handle duplicate geojson filenames
+- Handle duplicate geojson filenames
 
- ## Added
+## Added
 
 - Progress Bar
 
@@ -142,8 +172,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Updated
 
- - Dependency updates
- - Additional GTFS files to exclude
+- Dependency updates
+- Additional GTFS files to exclude
 
 ## Fixed
 
@@ -159,7 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Updated
 
- - Dependency updates
+- Dependency updates
 
 ## [3.6.0] - 2024-03-09
 
@@ -169,7 +199,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Updated
 
- - Dependency updates
+- Dependency updates
 
 ## [3.5.0] - 2024-03-01
 
