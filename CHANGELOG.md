@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-11-11
+
 - Adopt node-GTFS v5 configuration, reporting, package entry points and CLI conventions. See the [v4 migration guide](docs/migrating-to-v4.md).
 - Select multiple GIS layers per source, route, route direction or shape.
 - Export raw shape lines and GTFS Flex service areas.
@@ -490,3 +492,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated dependencies to fix issue with geojson consolidation
+
+[Unreleased]: https://github.com/BlinkTagInc/gtfs-to-geojson/compare/4.0.0...main
+[4.0.0]: https://github.com/BlinkTagInc/gtfs-to-geojson/compare/3.9.0...4.0.0

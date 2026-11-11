@@ -1,6 +1,6 @@
 {
   "name": "gtfs-to-geojson",
-  "version": "3.9.0",
+  "version": "4.0.0",
   "private": false,
   "description": "Export GTFS Schedule data as GIS-ready GeoJSON layers.",
   "keywords": [
