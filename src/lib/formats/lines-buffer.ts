@@ -1,9 +1,11 @@
+import type { GeometryInput } from '../feed.js';
+import type { Config } from '../../types/global_interfaces.js';
 import buffer from '@turf/buffer';
 
-import { getRouteLinesAsGeoJSON, simplifyGeoJSON } from '../geojson-utils.js';
+import { simplifyGeoJSON } from '../geojson-utils.js';
 
-const linesBuffer = (config, query = {}) => {
-  const lines = getRouteLinesAsGeoJSON(query);
+const linesBuffer = (config: Config, input: GeometryInput) => {
+  const lines = input.lines();
 
   if (!lines) {
     return null;

@@ -1,18 +1,34 @@
 import type {
-  Config as NodeGtfsConfig,
-  ConfigAgency as NodeGtfsConfigAgency,
+  GtfsBorrowedNativeSqliteDatabaseConfig,
+  GtfsCsvParseOptions,
 } from 'gtfs';
-
-export type ConfigAgency = NodeGtfsConfigAgency & {
+export type ConfigAgency = {
   agencyKey?: string;
   agency_key?: string;
+  path?: string;
+  url?: string;
+  exclude?: string[];
+  headers?: Record<string, string>;
+  fillEmptyAgencyId?: boolean;
+  agencyId?: string;
 };
+export type Config = {
+  sqlitePath?: string;
+  db?: GtfsBorrowedNativeSqliteDatabaseConfig['client'];
+  skipImport?: boolean;
+  ignoreDuplicates?: boolean;
+  downloadTimeout?: number;
+  csvOptions?: Omit<GtfsCsvParseOptions, 'skipEmptyLines' | 'relaxQuotes'> & {
+    skip_empty_lines?: boolean;
+    relax_quotes?: boolean;
+  };
+  gtfsToGeoJSONVersion?: string;
+  logFunction?: (message: string) => void;
 
-export type Config = Omit<NodeGtfsConfig, 'agencies'> & {
-  agencies: ConfigAgency[];
   bufferSizeMeters?: number;
   coordinatePrecision?: number;
-  logLevel?: boolean;
+  agencies: ConfigAgency[];
+  logLevel?: 'info' | 'warning' | 'warn' | 'error' | 'silent' | 'debug';
   outputType?: 'agency' | 'route' | 'shape';
   outputFormat?:
     | 'envelope'

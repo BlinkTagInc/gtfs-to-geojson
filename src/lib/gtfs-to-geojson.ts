@@ -1,13 +1,20 @@
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 
-import { clone, omit, uniqBy } from 'lodash-es';
-import { getRoutes, getTrips, openDb, importGtfs, getAgencies } from 'gtfs';
+import { groupBy } from 'lodash-es';
+import { Gtfs, type GtfsScheduleSourceConfig } from 'gtfs';
+import type { GtfsFileBackedFilename } from 'gtfs/schema';
+import { readFeed, type GeometryInput } from './feed.js';
 import pLimit from 'p-limit';
 import Timer from 'timer-machine';
-import sqlString from 'sqlstring-sqlite';
 import sanitize from 'sanitize-filename';
-import { getOutputPath, prepDirectory, zipFolders } from './file-utils.js';
+import {
+  getOutputPath,
+  prepDirectory,
+  zipFolders,
+  untildify,
+} from './file-utils.js';
 import { msToSeconds } from './formatters.js';
 import { log, generateLogText, logStats, progressBar } from './log-utils.js';
 
@@ -38,39 +45,12 @@ const setDefaultConfig = (initialConfig: Config) => {
     skipImport: false,
     logLevel: 'info',
     zipOutput: false,
-  };
+  } as const;
 
-  return Object.assign(defaults, initialConfig);
+  return { ...defaults, ...initialConfig };
 };
 
-/*
- * Get a list of service_id for a specified date range
- */
-const getServiceIdsForDateRange = (config: Config) => {
-  const db = openDb(config);
-  let whereClause = '';
-  const whereClauses = [];
-
-  if (config.endDate) {
-    whereClauses.push(`start_date <= ${sqlString.escape(config.endDate)}`);
-  }
-
-  if (config.startDate) {
-    whereClauses.push(`end_date >= ${sqlString.escape(config.startDate)}`);
-  }
-
-  if (whereClauses.length > 0) {
-    whereClause = `WHERE ${whereClauses.join(' AND ')}`;
-  }
-
-  const calendars = db.prepare(`SELECT * FROM calendar ${whereClause}`).all();
-
-  return calendars.map(
-    (calendar: Record<string, string>) => calendar.service_id,
-  );
-};
-
-const getGeoJSONByFormat = (config: Config, query = {}) => {
+const getGeoJSONByFormat = (config: Config, query: GeometryInput) => {
   if (config.outputFormat === 'envelope') {
     return envelope(config, query);
   }
@@ -113,24 +93,66 @@ const getGeoJSONByFormat = (config: Config, query = {}) => {
 };
 
 const buildGeoJSON = async (
+  gtfs: Gtfs,
   agencyKey: string,
   config: Config,
   outputPath: string,
   outputStats: { files: number; shapes: number; routes: number },
 ) => {
-  const db = openDb(config);
-  const baseQuery: { service_id?: string | string[] } = {};
-
-  if (config.startDate || config.endDate) {
-    const serviceIds: string[] = getServiceIdsForDateRange(config);
-    baseQuery.service_id = serviceIds;
+  if (config.outputType === 'agency') {
+    log(config)(`${agencyKey}: Generating geoJSON`);
+    const save = async (input: GeometryInput) => {
+      const geojson = getGeoJSONByFormat(config, input);
+      await writeFile(
+        path.join(outputPath, sanitize(agencyKey + '.geojson')),
+        JSON.stringify(geojson),
+      );
+      outputStats.files += 1;
+    };
+    if (!config.startDate && !config.endDate) {
+      const needsLines =
+        config.outputFormat === 'envelope' ||
+        config.outputFormat?.startsWith('lines');
+      const lines = needsLines ? await gtfs.geojson.routes() : null;
+      if (!needsLines || lines?.features.length) {
+        const needsStops =
+          config.outputFormat === 'convex' ||
+          config.outputFormat?.includes('stops');
+        const stops = needsStops ? await gtfs.geojson.stops() : null;
+        await save({
+          scope: `agency ${agencyKey}`,
+          lines: () => lines,
+          stops: () => ({
+            type: 'FeatureCollection',
+            features:
+              stops?.features.filter((f) => f.properties.routes.length) ?? [],
+          }),
+        });
+        return;
+      }
+    }
+    const feed = await readFeed(gtfs, config);
+    await save({
+      scope: `agency ${agencyKey}`,
+      lines: () => feed.getLines(feed.trips),
+      stops: () => feed.getStops(feed.trips),
+    });
+    return;
   }
-
+  const feed = await readFeed(gtfs, config);
+  const generate = (
+    trips: typeof feed.trips,
+    detail: string,
+    shapeId?: string,
+  ) =>
+    getGeoJSONByFormat(config, {
+      scope: `agency ${agencyKey}, ${detail}`,
+      lines: () => feed.getLines(trips, shapeId),
+      stops: () => feed.getStops(trips),
+    });
   if (config.outputType === 'shape') {
-    const shapes: {
-      shape_id: string;
-    }[] = await db.prepare('SELECT DISTINCT shape_id FROM shapes').all();
-
+    const tripsByShape = groupBy(feed.trips, 'shape_id');
+    const shapes = feed.shapeIds;
     if (shapes.length === 0) {
       throw new Error(
         'No shapes found in shapes.txt, unable to create geoJSON with outputType = shape',
@@ -146,10 +168,11 @@ const buildGeoJSON = async (
     await Promise.all(
       shapes.map(async (shape) =>
         limit(async () => {
-          const geojson = getGeoJSONByFormat(config, {
-            ...baseQuery,
-            shape_id: shape.shape_id,
-          });
+          const geojson = generate(
+            tripsByShape[shape] ?? [],
+            `shape_id=${shape}`,
+            shape,
+          );
 
           if (!geojson) {
             return;
@@ -157,7 +180,7 @@ const buildGeoJSON = async (
 
           outputStats.files += 1;
           outputStats.shapes += 1;
-          const fileName = `${shape.shape_id}.geojson`;
+          const fileName = `${shape}.geojson`;
           const filePath = path.join(outputPath, sanitize(fileName));
           await writeFile(filePath, JSON.stringify(geojson));
           bar.increment();
@@ -165,7 +188,8 @@ const buildGeoJSON = async (
       ),
     );
   } else if (config.outputType === 'route') {
-    const routes = getRoutes(baseQuery);
+    const tripsByRoute = groupBy(feed.trips, 'route_id');
+    const routes = feed.routes.filter((route) => tripsByRoute[route.route_id]);
 
     const bar = progressBar(
       `${agencyKey}: Generating geoJSON {bar} {value}/{total}`,
@@ -178,22 +202,16 @@ const buildGeoJSON = async (
         limit(async () => {
           outputStats.routes += 1;
 
-          const trips = getTrips(
-            {
-              ...baseQuery,
-              route_id: route.route_id,
-            },
-            ['trip_headsign', 'direction_id'],
+          const directions = Object.values(
+            groupBy(tripsByRoute[route.route_id], 'direction_id'),
           );
-
-          const directions = uniqBy(trips, (trip) => trip.trip_headsign);
           await Promise.all(
-            directions.map(async (direction) => {
-              const geojson = getGeoJSONByFormat(config, {
-                ...baseQuery,
-                route_id: route.route_id,
-                direction_id: direction.direction_id,
-              });
+            directions.map(async (trips) => {
+              const direction = trips[0];
+              const geojson = generate(
+                trips,
+                `route_id=${route.route_id}, direction_id=${direction.direction_id ?? '(blank)'}`,
+              );
 
               if (!geojson) {
                 return;
@@ -233,14 +251,6 @@ const buildGeoJSON = async (
         }),
       ),
     );
-  } else if (config.outputType === 'agency') {
-    log(config)(`${agencyKey}: Generating geoJSON`);
-
-    const geojson = getGeoJSONByFormat(config, baseQuery);
-    outputStats.files += 1;
-    const fileName = `${agencyKey}.geojson`;
-    const filePath = path.join(outputPath, sanitize(fileName));
-    await writeFile(filePath, JSON.stringify(geojson));
   } else {
     throw new Error(
       `Invalid outputType=${config.outputType} supplied in config.json`,
@@ -253,7 +263,7 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
   const geojsonPaths = [];
   const agencyKeys = [];
 
-  await openDb(config);
+  const sourceIds = new Set<string>();
 
   for (const agency of config.agencies) {
     const timer = new Timer();
@@ -266,7 +276,7 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
     };
 
     // Exclude files that are not needed for GeoJSON creation
-    agency.exclude = [
+    const exclude = [
       'areas',
       'attributions',
       'booking_rules',
@@ -284,51 +294,108 @@ const gtfsToGeoJSON = async (initialConfig: Config) => {
       ...(agency.exclude ?? []),
     ];
 
-    if (config.skipImport !== true) {
-      // Import GTFS
-      const agencyConfig = {
-        ...clone(omit(config, 'agencies')),
-        agencies: [agency],
-      };
-
-      await importGtfs(agencyConfig);
-    }
-
-    let agencyKey = agency.agencyKey ?? agency.agency_key;
-
-    if (!agencyKey) {
-      const db = openDb(config);
-      const agencies = getAgencies();
-
-      if (agencies.length > 0) {
-        agencyKey = agencies.map((a) => a.agency_name).join('-');
-      } else {
-        agencyKey = 'unknown';
+    const location = agency.url ?? agency.path;
+    const sourceId =
+      agency.agencyKey ??
+      agency.agency_key ??
+      (location && createHash('sha256').update(location).digest('hex'));
+    if (!sourceId || sourceIds.has(sourceId))
+      throw new Error('Each feed needs a unique agencyKey.');
+    sourceIds.add(sourceId);
+    if ('prefix' in agency && agency.prefix)
+      throw new Error(
+        'Remove the v4 ID prefix and use agencyKey to distinguish feeds.',
+      );
+    if ('ignoreErrors' in config && config.ignoreErrors)
+      throw new Error(
+        'ignoreErrors is unsupported. Correct the feed and retry the import.',
+      );
+    if ('proj' in agency)
+      throw new Error(
+        'Convert projected coordinates to WGS84 before importing with gtfs v5.',
+      );
+    const gtfs = new Gtfs({
+      database: config.db
+        ? { client: config.db }
+        : { path: untildify(config.sqlitePath ?? ':memory:') },
+      extensions: ['gtfs-plus'],
+      sources: [{ sourceId }],
+    });
+    try {
+      if (!config.skipImport) {
+        const input = agency.url
+          ? {
+              url: agency.url,
+              requestHeaders: agency.headers,
+              timeoutMs: config.downloadTimeout,
+            }
+          : agency.path
+            ? { path: untildify(agency.path) }
+            : null;
+        if (!input) throw new Error('Each agency needs a GTFS path or URL.');
+        const { skip_empty_lines, relax_quotes, ...csv } =
+          config.csvOptions ?? {};
+        const schedule: GtfsScheduleSourceConfig = {
+          ...input,
+          excludeFiles: [
+            ...new Set(
+              exclude.map(
+                (f) =>
+                  (f.includes('.') ? f : f + '.txt') as GtfsFileBackedFilename,
+              ),
+            ),
+          ],
+          defaultAgencyId: agency.fillEmptyAgencyId
+            ? agency.agencyId
+            : undefined,
+          import: {
+            csv: {
+              ...csv,
+              skipEmptyLines: skip_empty_lines,
+              relaxQuotes: relax_quotes,
+            },
+            validation: {
+              onDuplicateKey: config.ignoreDuplicates ? 'keep-first' : 'reject',
+            },
+          },
+        };
+        const result = await gtfs.import({ sources: [{ sourceId, schedule }] });
+        if (!result.success)
+          throw result.errors[0] ?? new Error('GTFS import failed.');
       }
+      const agencies = await gtfs.schedule.agency.all();
+      if (config.skipImport && !agencies.length)
+        throw new Error('No imported feed for ' + sourceId);
+      const agencyKey =
+        agency.agencyKey ??
+        agency.agency_key ??
+        (agencies.map((a) => a.agency_name).join('-') || 'unknown');
+
+      const outputPath = getOutputPath(agencyKey, config);
+
+      await prepDirectory(outputPath, config);
+
+      await buildGeoJSON(gtfs, agencyKey, config, outputPath, outputStats);
+
+      // Generate output log.txt
+      const logText = await generateLogText(gtfs, agency, outputStats, config);
+      const filePath = path.join(outputPath, 'log.txt');
+      await writeFile(filePath, logText);
+
+      log(config)(`GeoJSON for ${agencyKey} created at ${outputPath}`);
+
+      logStats(config)(outputStats);
+
+      timer.stop();
+      log(config)(
+        `GeoJSON generation required ${msToSeconds(timer.time())} seconds`,
+      );
+
+      geojsonPaths.push(outputPath);
+      agencyKeys.push(agencyKey);
+    } finally {
+      await gtfs.close();
     }
-
-    const outputPath = getOutputPath(agencyKey, config);
-
-    await prepDirectory(outputPath, config);
-
-    await buildGeoJSON(agencyKey, config, outputPath, outputStats);
-
-    // Generate output log.txt
-    const logText = generateLogText(agency, outputStats, config);
-    const filePath = path.join(outputPath, 'log.txt');
-    await writeFile(filePath, logText);
-
-    log(config)(`GeoJSON for ${agencyKey} created at ${outputPath}`);
-
-    logStats(config)(outputStats);
-
-    timer.stop();
-    log(config)(
-      `GeoJSON generation required ${msToSeconds(timer.time())} seconds`,
-    );
-
-    geojsonPaths.push(outputPath);
-    agencyKeys.push(agencyKey);
   }
 
   // Zip output, if specified in config

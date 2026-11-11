@@ -1,16 +1,23 @@
 import { clearLine, cursorTo } from 'node:readline';
 import * as colors from 'yoctocolors';
-import { getFeedInfo } from 'gtfs';
+import type { Gtfs } from 'gtfs';
 import { noop } from 'lodash-es';
 import Table from 'cli-table';
 
-import type { Config } from '../types/global_interfaces.js';
+import type { Config, ConfigAgency } from '../types/global_interfaces.js';
+
+type OutputStats = { routes: number; shapes: number; files: number };
 
 /*
  * Creates text for a log of output details.
  */
-export function generateLogText(agency, outputStats, config: Config) {
-  const feedInfo = getFeedInfo();
+export async function generateLogText(
+  gtfs: Gtfs,
+  agency: ConfigAgency,
+  outputStats: OutputStats,
+  config: Config,
+) {
+  const feedInfo = await gtfs.schedule.feedInfo.all();
   const feedVersion =
     feedInfo.length > 0 && feedInfo[0].feed_version
       ? feedInfo[0].feed_version
@@ -35,7 +42,7 @@ export function generateLogText(agency, outputStats, config: Config) {
   return logText.join('\n');
 }
 
-function getLogLevel(config: Config): LogLevel {
+function getLogLevel(config: Config) {
   if (config.logLevel !== undefined) {
     return config.logLevel;
   }
@@ -56,7 +63,7 @@ export function log(config: Config) {
     return config.logFunction;
   }
 
-  return (text, overwrite) => {
+  return (text: string, overwrite?: boolean) => {
     if (overwrite === true && process.stdout.isTTY) {
       clearLine(process.stdout, 0);
       cursorTo(process.stdout, 0);
@@ -123,7 +130,7 @@ export function logStats(config: Config) {
     return noop;
   }
 
-  return (stats) => {
+  return (stats: OutputStats) => {
     const table = new Table({
       colWidths: [40, 20],
       head: ['Item', 'Count'],
@@ -143,7 +150,11 @@ export function logStats(config: Config) {
 /*
  * Create progress bar text string
  */
-const generateProgressBarString = (barTotal, barProgress, size = 40) => {
+const generateProgressBarString = (
+  barTotal: number,
+  barProgress: number,
+  size = 40,
+) => {
   const line = '-';
   const slider = '=';
   if (!barTotal) {
@@ -181,7 +192,11 @@ const generateProgressBarString = (barTotal, barProgress, size = 40) => {
 /*
  * Print a progress bar to the console.
  */
-export function progressBar(formatString: string, barTotal: number, config) {
+export function progressBar(
+  formatString: string,
+  barTotal: number,
+  config: Config,
+) {
   let barProgress = 0;
 
   const logLevel = getLogLevel(config);
@@ -201,8 +216,8 @@ export function progressBar(formatString: string, barTotal: number, config) {
 
   const renderProgressString = () =>
     formatString
-      .replace('{value}', barProgress)
-      .replace('{total}', barTotal)
+      .replace('{value}', String(barProgress))
+      .replace('{total}', String(barTotal))
       .replace('{bar}', generateProgressBarString(barTotal, barProgress));
 
   log(config)(renderProgressString(), true);

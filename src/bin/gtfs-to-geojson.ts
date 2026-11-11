@@ -10,7 +10,7 @@ import { formatError } from '../lib/log-utils.js';
 
 const pe = new PrettyError();
 
-const { argv } = yargs(hideBin(process.argv))
+const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 --config ./config.json')
   .help()
   .option('c', {
@@ -24,7 +24,7 @@ const { argv } = yargs(hideBin(process.argv))
     describe: "Don't import GTFS file.",
     type: 'boolean',
   })
-  .default('skipImport', undefined);
+  .parseSync();
 
 const handleError = (error: any) => {
   const text = error || 'Unknown Error';
@@ -34,7 +34,7 @@ const handleError = (error: any) => {
 };
 
 const setupImport = async () => {
-  const config = await getConfig(argv);
+  const config = await getConfig({ configPath: argv.c, skipImport: argv.s });
   await gtfsToGeoJSON(config);
   process.exit();
 };

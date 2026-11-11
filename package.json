@@ -29,7 +29,8 @@
   },
   "scripts": {
     "prepare": "husky",
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "npm run build && node --test"
   },
   "dependencies": {
     "@turf/bbox": "^7.4.0",
@@ -42,12 +43,11 @@
     "@turf/union": "^7.4.0",
     "archiver": "^8.0.0",
     "cli-table": "^0.3.11",
-    "gtfs": "^4.21.0",
+    "gtfs": "5.0.0-beta.0",
     "lodash-es": "^4.18.1",
     "p-limit": "^7.3.3",
     "pretty-error": "^4.0.0",
     "sanitize-filename": "^1.6.5",
-    "sqlstring-sqlite": "^0.1.1",
     "timer-machine": "^1.1.0",
     "toposort": "^2.0.2",
     "yargs": "^18.2.0",
@@ -67,7 +67,7 @@
     "typescript": "^7.0.2"
   },
   "engines": {
-    "node": ">= 22"
+    "node": "^22.18.0 || >=24.0.0"
   },
   "release-it": {
     "github": {

@@ -171,19 +171,7 @@ A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at
 }
 ```
 
-- Optionally specify a proj4 projection string to correct poorly formed coordinates in the GTFS file
-
-```json
-{
-  "agencies": [
-    {
-      "agencyKey": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/",
-      "proj": "+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +a=6378249.2 +b=6356515 +towgs84=-168,-60,320,0,0,0,0 +pm=paris +units=m +no_defs"
-    }
-  ]
-}
-```
+Use WGS84 longitude and latitude for stop and shape coordinates. Convert projected feeds before importing.
 
 ### bufferSizeMeters
 
@@ -238,21 +226,23 @@ Only stops which are used in one or more routes will be output in geoJSON.
 
 | Format            | Type                        | Description                                 | Example                                                                                                                   | geoJSON                                                                                                                |
 | ----------------- | --------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `envelope`        | Polygon                     | A rectangular box around route lines.       | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/envelope.png">        | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/envelope.geojson)               |
-| `convex`          | Polygon                     | A convex polygon around route endpoints.    | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/convex.png">          | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/convex.geojson)                   |
-| `stops`           | Points                      | Stops as points.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops.png">           | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops.geojson)                     |
-| `stops-buffer`    | Polygons                    | A buffer around stops.                      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-buffer.png">    | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-buffer.geojson)       |
-| `stops-dissolved` | Polygons                    | A dissolved buffer around stops.            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/stops-dissolved.geojson) |
-| `lines`           | MultiLineStrings            | Routes as lines.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines.png">           | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines.geojson)                     |
-| `lines-buffer`    | Polygons                    | A buffer around route lines.                | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-buffer.png">    | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-buffer.geojson)       |
-| `lines-dissolved` | Polygons                    | A dissolved buffer around route lines.      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-dissolved.geojson) |
-| `lines-and-stops` | Points and MultiLineStrings | Both points and lines for stops and routes. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/master/examples/lines-and-stops.png"> | [lines-and-stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/master/examples/lines-and-stops.geojson) |
+| `envelope`        | Polygon                     | A rectangular box around route lines.       | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/envelope.png">        | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/envelope.geojson)               |
+| `convex`          | Polygon                     | A convex polygon around route endpoints.    | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/convex.png">          | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/convex.geojson)                   |
+| `stops`           | Points                      | Stops as points.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops.png">           | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops.geojson)                     |
+| `stops-buffer`    | Polygons                    | A buffer around stops.                      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops-buffer.png">    | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops-buffer.geojson)       |
+| `stops-dissolved` | Polygons                    | A dissolved buffer around stops.            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops-dissolved.geojson) |
+| `lines`           | MultiLineStrings            | Routes as lines.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines.png">           | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines.geojson)                     |
+| `lines-buffer`    | Polygons                    | A buffer around route lines.                | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-buffer.png">    | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-buffer.geojson)       |
+| `lines-dissolved` | Polygons                    | A dissolved buffer around route lines.      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-dissolved.geojson) |
+| `lines-and-stops` | Points and MultiLineStrings | Both points and lines for stops and routes. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-and-stops.png"> | [lines-and-stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-and-stops.geojson) |
 
 ```
     "outputFormat": "lines-and-stops"
 ```
 
 ### sqlitePath
+
+When upgrading to node-GTFS v5, choose a fresh SQLite path and import your original feeds once before using `--skipImport`. Keep the v4 file for rollback. Each agency’s `agencyKey` identifies its feed across imports.
 
 {String} A path to an SQLite database. Optional, defaults to using an in-memory database with a value of `:memory:`. If you want the data imported to persist, you need to specify a value for `sqlitePath`. Supports tilde as part of the path, like `~/Downloads/gtfs`.
 

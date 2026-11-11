@@ -1,19 +1,16 @@
-import { getStopsAsGeoJSON } from 'gtfs';
+import type { GeometryInput } from '../feed.js';
+import type { Config } from '../../types/global_interfaces.js';
 
-import {
-  getRouteLinesAsGeoJSON,
-  mergeGeojson,
-  simplifyGeoJSON,
-} from '../geojson-utils.js';
+import { mergeGeojson, simplifyGeoJSON } from '../geojson-utils.js';
 
-const linesAndStops = (config, query = {}) => {
-  const shapesGeojson = getRouteLinesAsGeoJSON(query);
+const linesAndStops = (config: Config, input: GeometryInput) => {
+  const shapesGeojson = input.lines();
 
   if (!shapesGeojson) {
     return null;
   }
 
-  const stopsGeojson = getStopsAsGeoJSON(query);
+  const stopsGeojson = input.stops();
   const geojson = mergeGeojson(shapesGeojson, stopsGeojson);
 
   return simplifyGeoJSON(geojson, config);

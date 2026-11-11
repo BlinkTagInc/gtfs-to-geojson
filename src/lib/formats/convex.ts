@@ -1,4 +1,4 @@
-import { getStopsAsGeoJSON } from 'gtfs';
+import type { GeometryInput } from '../feed.js';
 import turfConvex from '@turf/convex';
 import { featureEach } from '@turf/meta';
 
@@ -6,18 +6,20 @@ import { simplifyGeoJSON } from '../geojson-utils.js';
 import { logWarning } from '../log-utils.js';
 import type { Config } from '../../types/global_interfaces.js';
 
-const convex = (config: Config, query = {}) => {
-  const stops = getStopsAsGeoJSON(query);
+const convex = (config: Config, input: GeometryInput) => {
+  const stops = input.stops();
   const geojson = turfConvex(stops);
 
   if (!geojson) {
-    if (query.route_id && query.direction_id) {
-      logWarning(config)(
-        `Unable to calculate convex hull for route: ${query.route_id} direction: ${query.direction_id}`,
-      );
-    } else {
-      logWarning(config)('Unable to calculate convex hull');
-    }
+    const locations = new Set(
+      stops.features.map((stop) =>
+        stop.geometry.coordinates.slice(0, 2).join(','),
+      ),
+    ).size;
+    const count = stops.features.length;
+    logWarning(config)(
+      `Unable to calculate convex hull for ${input.scope}. Found ${count} ${count === 1 ? 'stop' : 'stops'} with coordinates at ${locations} distinct ${locations === 1 ? 'location' : 'locations'}. A hull requires at least three non-collinear locations.`,
+    );
     return null;
   }
 

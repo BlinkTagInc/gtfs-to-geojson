@@ -1,11 +1,13 @@
+import type { GeometryInput } from '../feed.js';
+import type { Config } from '../../types/global_interfaces.js';
 import bbox from '@turf/bbox';
 import bboxPoly from '@turf/bbox-polygon';
 import { featureEach } from '@turf/meta';
 
-import { getRouteLinesAsGeoJSON, simplifyGeoJSON } from '../geojson-utils.js';
+import { simplifyGeoJSON } from '../geojson-utils.js';
 
-const envelope = (config, query = {}) => {
-  const lines = getRouteLinesAsGeoJSON(query);
+const envelope = (config: Config, input: GeometryInput) => {
+  const lines = input.lines();
 
   if (!lines) {
     return null;
@@ -17,7 +19,7 @@ const envelope = (config, query = {}) => {
     // Assign agency_name
     feature.properties = {
       ...(feature.properties || {}),
-      agency_name: lines.features[0].properties.agency_name,
+      agency_name: lines.features[0].properties?.agency_name,
     };
   });
 
