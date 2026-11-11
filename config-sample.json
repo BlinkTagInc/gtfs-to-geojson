@@ -1,18 +1,4 @@
 {
-  "agencies": [
-    {
-      "agencyKey": "bart",
-      "url": "http://www.bart.gov/dev/schedules/google_transit.zip"
-    }
-  ],
-  "bufferSizeMeters": 400,
-  "coordinatePrecision": 5,
-  "outputType": "agency",
-  "outputFormat": "lines-and-stops",
-  "outputPath": "custom/output/path",
-  "overwriteExistingFiles": true,
-  "startDate": "20240301",
-  "endDate": "20240331",
-  "logLevel": "info",
-  "zipOutput": false
+  "sources": [{ "sourceId": "caltrain", "schedule": { "path": "./gtfs.zip" } }],
+  "export": { "outputDirectory": "./geojson" }
 }

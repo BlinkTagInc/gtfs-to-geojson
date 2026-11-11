@@ -1,0 +1,19 @@
+{
+  "database": { "path": "./transit.sqlite" },
+  "extensions": ["gtfs-plus"],
+  "reporting": { "level": "info" },
+  "sources": [
+    { "sourceId": "bus", "schedule": { "path": "./bus.zip" } },
+    { "sourceId": "rail", "schedule": { "path": "./rail.zip" } }
+  ],
+  "export": {
+    "outputDirectory": "./geojson",
+    "overwrite": false,
+    "groupBy": "route-direction",
+    "layers": ["route-lines", "stop-points", "stop-coverage"],
+    "serviceDate": 20260914,
+    "bufferRadiusMeters": 400,
+    "coordinateDecimals": 6,
+    "archive": true
+  }
+}

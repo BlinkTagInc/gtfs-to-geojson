@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: 'If you use GTFS-to-GeoJSON in research, please cite it using the metadata below.'
+title: 'GTFS-to-GeoJSON'
+type: software
+authors:
+  - family-names: 'Nee'
+    given-names: 'Brendan'
+    affiliation: 'BlinkTag Inc'
+repository-code: 'https://github.com/BlinkTagInc/gtfs-to-geojson'
+url: 'https://www.npmjs.com/package/gtfs-to-geojson'
+license: 'MIT'

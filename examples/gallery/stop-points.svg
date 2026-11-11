@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 265" width="320" height="265" role="img" aria-labelledby="title"><title id="title">stop-points, 6 features</title>
+<rect width="320" height="265" rx="8" fill="#f5f7f2"/>
+<g stroke-linecap="round" stroke-linejoin="round"><circle cx="267.0" cy="110.8" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="131.3" cy="130.6" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="193.9" cy="38.2" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="204.4" cy="209.8" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="149.6" cy="124.0" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="53.0" cy="170.2" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/></g>
+<text x="12" y="254" font-family="system-ui,sans-serif" font-size="13" fill="#465d58">6 features</text></svg>

@@ -1,0 +1,5 @@
+route_id,service_id,trip_id,shape_id
+A,day,A1,A1
+A,day,A2,A2
+B,day,B1,B1
+F,day,flex,

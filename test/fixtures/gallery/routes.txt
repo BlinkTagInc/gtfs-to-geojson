@@ -1,0 +1,4 @@
+route_id,agency_id,route_short_name,route_type
+A,demo,A,3
+B,demo,B,3
+F,demo,Flex,3

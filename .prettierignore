@@ -1,0 +1,7 @@
+node_modules
+dist
+examples
+geojson
+pnpm-lock.yaml
+config*.json
+!config-sample*.json

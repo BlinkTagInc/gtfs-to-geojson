@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+- Adopt node-GTFS v5 configuration, reporting, package entry points and CLI conventions. See the [v4 migration guide](docs/migrating-to-v4.md).
+- Select multiple GIS layers per source, route, route direction or shape.
+- Export raw shape lines and GTFS Flex service areas.
+- Apply service weekdays and calendar exceptions.
+- Build fallback route geometry from individual trip stop sequences.
+- Skip stop-time scans for shaped line-only exports.
+- Stage complete datasets before replacement.
+- List output files in a manifest.
+
 ## [3.9.0] - 2026-11-10
 
 ### Updated

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 265" width="320" height="265" role="img" aria-labelledby="title"><title id="title">shape-lines, 3 features</title>
+<rect width="320" height="265" rx="8" fill="#f5f7f2"/>
+<g stroke-linecap="round" stroke-linejoin="round"><path d="M53.0,170.2L131.3,130.6L193.9,38.2" fill="none" stroke="#13645b" stroke-width="3.5"/>
+<path d="M53.0,170.2L131.3,130.6L149.6,124.0L267.0,110.8" fill="none" stroke="#b45025" stroke-width="3.5" stroke-dasharray="7 5"/>
+<path d="M204.4,209.8L149.6,124.0L267.0,110.8" fill="none" stroke="#6351a0" stroke-width="3.5" stroke-dasharray="2 5"/></g>
+<text x="12" y="254" font-family="system-ui,sans-serif" font-size="13" fill="#465d58">3 features</text></svg>

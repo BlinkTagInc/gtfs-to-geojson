@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 265" width="320" height="265" role="img" aria-labelledby="title"><title id="title">network, 8 features</title>
+<rect width="320" height="265" rx="8" fill="#f5f7f2"/>
+<g stroke-linecap="round" stroke-linejoin="round"><path d="M53.0,170.2L131.3,130.6L193.9,38.2M131.3,130.6L149.6,124.0L267.0,110.8" fill="none" stroke="#13645b" stroke-width="3.5"/>
+<path d="M204.4,209.8L149.6,124.0L267.0,110.8" fill="none" stroke="#b45025" stroke-width="3.5" stroke-dasharray="7 5"/>
+<circle cx="267.0" cy="110.8" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="131.3" cy="130.6" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="193.9" cy="38.2" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="204.4" cy="209.8" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="149.6" cy="124.0" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/>
+<circle cx="53.0" cy="170.2" r="4.5" fill="white" stroke="#173e42" stroke-width="2.5"/></g>
+<text x="12" y="254" font-family="system-ui,sans-serif" font-size="13" fill="#465d58">8 features</text></svg>

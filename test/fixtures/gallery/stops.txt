@@ -1,0 +1,7 @@
+stop_id,stop_name,stop_lat,stop_lon
+west,West,37.76,-122.45
+junction,Junction,37.766,-122.435
+north,North,37.78,-122.423
+east,East,37.769,-122.409
+south,South,37.754,-122.421
+transfer,Transfer,37.767,-122.4315

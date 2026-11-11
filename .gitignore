@@ -5,8 +5,9 @@ node_modules
 geojson
 
 # config files
-config*
+/config*
 !config-sample*
 
 # Build files
 /dist
+.DS_Store

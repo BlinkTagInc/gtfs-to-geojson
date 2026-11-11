@@ -1,0 +1,2 @@
+service_id,date,exception_type
+day,20260105,1

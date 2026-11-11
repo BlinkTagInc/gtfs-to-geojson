@@ -1,306 +1,111 @@
-<p align="center">
-  ➡️
-  <a href="https://geojson.gtfstohtml.com">Web Version</a> |
-  <a href="#installation">Installation</a> |
-  <a href="#quick-start">Quick Start</a> |
-  <a href="#configuration">Configuration</a>
-  ⬅️
-  <br /><br />
-  <img src="docs/images/gtfs-to-geojson-logo.svg" alt="GTFS-to-GeoJSON" />
-  <br /><br />
-  <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/v/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
-  <a href="https://www.npmjs.com/package/gtfs-to-geojson" rel="nofollow"><img src="https://img.shields.io/npm/dm/gtfs-to-geojson.svg?style=flat" style="max-width: 100%;"></a>
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
-  <br /><br />
-  Generate geoJSON of transit route data from a GTFS file.
-  <br /><br />
-  <a href="https://nodei.co/npm/gtfs-to-geojson/" rel="nofollow"><img src="https://nodei.co/npm/gtfs-to-geojson.png?downloads=true" alt="NPM" style="max-width: 100%;"></a>
-</p>
+# GTFS-to-GeoJSON
 
-<hr>
+<p align="center"><img src="docs/images/gtfs-to-geojson-logo.svg" alt="GTFS-to-GeoJSON logo" width="140"></p>
 
-`gtfs-to-geojson` converts transit data in [GTFS format](https://developers.google.com/transit/gtfs/) into GeoJSON. This includes both shapes and stops. It can be configured to generate one GeoJSON file per route or a single file which contains all routes for an agency. This is useful for creating maps of transit routes.
+Export a GTFS Schedule feed as GeoJSON layers for QGIS, web maps and spatial analysis. By default you get a route line layer and a served stop point layer for each input source. You can also export individual trip shapes, GTFS Flex service areas, buffers and dissolved coverage polygons.
 
-<img width="762" src="https://user-images.githubusercontent.com/96217/81493949-96532f00-9259-11ea-9e09-d0399b59bf30.png">
+![Caltrain route lines and served stops beside a detail of 400-meter station buffers](examples/caltrain/preview.svg)
 
-<img width="762" src="https://user-images.githubusercontent.com/96217/101810511-1da99f00-3ad6-11eb-90e7-cb2b6919a77f.jpg">
+[Browse example GeoJSON](examples/caltrain) · [Web version](https://geojson.gtfstohtml.com) · [Migrate from v3](docs/migrating-to-v4.md)
 
-`gtfs-to-geojson` uses the [`node-gtfs`](https://github.com/blinktaginc/node-gtfs) library to handle importing and querying GTFS data. If you are looking to generate HTML timetables in addition to maps, check out the [gtfs-to-html](https://github.com/BlinkTagInc/gtfs-to-html) project. If you'd like to make a cool stringline chart of all trips on a route throughout the day, check out the [gtfs-to-chart](https://github.com/BlinkTagInc/gtfs-to-chart) project.
+## Quick start
 
-### GTFS-to-geojson on the web
+Use Node.js 22.18+ on the 22.x line, or Node.js 24+. These examples use a local GTFS zip. An extracted feed directory also works.
 
-You can now use gtfs-to-geojson without actually downloading any code or doing any configuration. geojson.gtfstohtml.com provides a web based interface for generating GeoJSON from GTFS. It allows uploading a zipped GTFS file or specifying a URL to a GTFS file.
-
-## Current Usage
-
-Many transit agencies use `gtfs-to-geojson` to generate the maps for their websites, including:
-
-- [511 Contra Costa](https://511contracosta.org/public-transit/contra-costa-transit-map/)
-- [County Connection](https://countyconnection.com/)
-- [Kings Area Rural Transit (KART)](https://www.kartbus.org/)
-- [Marin Transit](https://marintransit.org/)
-- [MVgo](https://mvgo.org/)
-- [Mountain View Community Shuttle](https://mvcommunityshuttle.com/)
-
-Are you using `gtfs-to-geojson`? Let us know via email (<brendan@blinktag.com>) or via opening a github issue or pull request if your agency is using this library.
-
-## Installation
-
-If you would like to use this library as a command-line utility, you can install it globally directly from [npm](https://npmjs.org):
-
-    npm install gtfs-to-geojson -g
-
-If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
-
-## Quick Start
-
-### Command-line example
-
-    gtfs-to-geojson --configPath /path/to/your/custom-config.json
-
-### Code example
-
-```js
-import gtfsToGeoJSON from "gtfs-to-geojson";
-import { readFile } from "fs/promises";
-const config = JSON.parse(
-  await readFile(new URL("./config.json", import.meta.url)),
-);
-
-gtfsToGeoJSON(config)
-  .then(() => {
-    console.log("GeoJSON Generation Successful");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+```sh
+npx gtfs-to-geojson --input ./gtfs.zip --source-id metro
 ```
+
+Open `geojson/metro/route-lines.geojson` or `geojson/metro/stop-points.geojson` in your GIS. Each file is a GeoJSON FeatureCollection in longitude, latitude order. For one file containing both, pass `--layer network`.
+
+```sh
+# Export actual shape paths and stop points for each route and direction
+npx gtfs-to-geojson --input ./gtfs.zip --output ./directions \
+  --group-by route-direction --layer shape-lines --layer stop-points
+
+# Export from an existing node-GTFS v5 database
+npx gtfs-to-geojson --database ./transit.sqlite --source-id metro \
+  --service-date 20260914 --layer stop-coverage --output ./coverage
+```
+
+Use `--url` for a remote archive. The CLI reads `./config.json` if present, or the file given by `--config`. CLI options override the file. Direct input replaces the source list. Relative paths resolve from the working directory. Progress and warnings go to stderr. Help and version go to stdout. Run `gtfs-to-geojson --help` for all flags.
 
 ## Configuration
 
-Copy `config-sample.json` to `config.json` and then add your projects configuration to `config.json`.
-
-    cp config-sample.json config.json
-
-A sample configuration that pulls in GTFS for 29 Bay Area transit agencies is at `config-sample-bayarea.json`. It is used generate data for the map on [bayareatransitmap.com](https://bayareatransitmap.com).
-
-| option                                        | type    | description                                                                                                                                                                                                        |
-| --------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`agencies`](#agencies)                       | array   | An array of GTFS files to be imported.                                                                                                                                                                             |
-| [`bufferSizeMeters`](#buffersizemeters)       | integer | Radius of buffers in meters. Optional, defaults to 400 meters (1/4 mile).                                                                                                                                          |
-| [`coordinatePrecision`](#coordinateprecision) | integer | The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Optional.                                                                                         |
-| [`endDate`](#enddate)                         | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.                                                                                        |
-| [`logLevel`](#loglevel)                       | string  | Options are "silent", "error", "warning", and "info". Optional, defaults to "info".                                                                                                                                |
-| [`outputType`](#outputtype)                   | string  | The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to "agency".                                                                                                             |
-| [`outputFormat`](#outputformat)               | string  | The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops". |
-| [`startDate`](#startdate)                     | string  | A date in YYYYMMDD format to use to filter calendar.txt service. Optional, defaults to using all service in specified GTFS.                                                                                        |
-| [`sqlitePath`](#sqlitepath)                   | string  | A path to an SQLite database. Optional, defaults to using an in-memory database.                                                                                                                                   |
-| [`zipOutput`](#zipoutput)                     | boolean | Whether or not to zip the output into one zip file. Optional, defaults to false.                                                                                                                                   |
-
-### agencies
-
-{Array} Specify the GTFS files to be imported in an `agencies` array. GTFS files can be imported via a `url` or a local `path`. Each agency needs an `agencyKey`, a unique identifier for the GTFS file.
-
-- Specify a download URL:
+Copy [config-sample.json](config-sample.json) to `config.json`, set the feed location, and run `gtfs-to-geojson`. [config-sample-full.json](config-sample-full.json) shows two sources, a persistent database and multiple layers.
 
 ```json
 {
-  "agencies": [
-    {
-      "agencyKey": "county-connection",
-      "url": "http://cccta.org/GTFS/google_transit.zip"
-    }
-  ]
+  "sources": [{ "sourceId": "metro", "schedule": { "path": "./gtfs.zip" } }],
+  "export": {
+    "outputDirectory": "./maps",
+    "groupBy": "route",
+    "layers": ["route-lines", "stop-points"]
+  }
 }
 ```
 
-- Specify a path to a zipped GTFS file:
+The shared `database`, `sources[].schedule`, `extensions` and `reporting` groups use [node-GTFS v5 instance and Schedule options](https://github.com/BlinkTagInc/node-gtfs/blob/main/docs/configuration.md). For example, put HTTP headers in `schedule.requestHeaders` and duplicate handling in `schedule.import.validation.onDuplicateKey`. Enable GTFS+ explicitly with `"extensions": ["gtfs-plus"]`.
 
-```json
-{
-  "agencies": [
-    {
-      "agencyKey": "myAgency",
-      "path": "/path/to/the/gtfs.zip"
-    }
-  ]
-}
+A source with a schedule imports before export. A source containing just `sourceId` reads previously imported data. The database defaults to in-memory SQLite. One source can omit its ID and use `default`. Multiple sources require distinct IDs. Set `export.sourceId` to select one.
+
+| Export option        | Default                          | Meaning                                                                                                                                                                                           |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outputDirectory`    | `./geojson`                      | Dedicated destination containing one subdirectory per source.                                                                                                                                     |
+| `groupBy`            | `source`                         | `source`, `route`, `route-direction` or `shape`.                                                                                                                                                  |
+| `layers`             | `["route-lines", "stop-points"]` | One file per selected layer in each group.                                                                                                                                                        |
+| `serviceDate`        | All service                      | Numeric YYYYMMDD or an inclusive range such as `{ "start": 20260101, "end": 20260131 }`. Either endpoint may be omitted. Selects trips active on any matching day, including calendar exceptions. |
+| `bufferRadiusMeters` | `400`                            | Distance from the original point or line to the edge of its buffer.                                                                                                                               |
+| `coordinateDecimals` | Full precision                   | Round coordinates after spatial operations. Five decimal places work well for most route and stop maps.                                                                                           |
+| `archive`            | `false`                          | Also write `geojson.zip`, preserving the layer paths.                                                                                                                                             |
+| `overwrite`          | `false`                          | Replace a previous export after generation succeeds. An unrelated file in the output directory blocks replacement.                                                                                |
+
+With `coordinateDecimals: 5`, rounding can shift a point by less than one meter. Use `6` when nearby features need to remain distinct at sub-meter scales, such as detailed platform or service-area boundaries. Omit the option to preserve the original coordinate precision. [GeoJSON precision guidance](https://datatracker.ietf.org/doc/html/rfc7946#section-11.2)
+
+For example, a route-direction export writes `metro/route-direction/R/0/stop-points.geojson`. Trips with a blank direction use `unspecified`. Unsafe filename characters and case collisions get a hash suffix. The original IDs remain in feature properties. The output manifest lists generated files relative to the destination.
+
+## Layers
+
+The maps show the same illustrative feed at the same scale. It has two fixed routes, three shapes, six stops and one Flex zone. The buffers use a 400-meter radius. Select a layer name to inspect its GeoJSON.
+
+| Layer                                                                                  | Example                                                                                                                        | What each feature represents                                                                                                                             |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`route-lines`](examples/gallery/route-lines.geojson)<br>MultiLineString               | <img src="examples/gallery/route-lines.svg" alt="Two routes, one with a fork" width="180">                                     | One feature per route. Route A includes both of its branches. Shared segments appear once within each route.                                             |
+| [`shape-lines`](examples/gallery/shape-lines.geojson)<br>LineString                    | <img src="examples/gallery/shape-lines.svg" alt="Three trip paths with overlapping segments" width="180">                      | One feature per original GTFS shape, preserving point order. The two variants of route A appear as separate features.                                    |
+| [`stop-points`](examples/gallery/stop-points.geojson)<br>Point                         | <img src="examples/gallery/stop-points.svg" alt="Six individual stops" width="180">                                            | One feature per served stop with coordinates. Each point lists its serving routes.                                                                       |
+| [`network`](examples/gallery/network.geojson)<br>MultiLineString and Point             | <img src="examples/gallery/network.svg" alt="Six stop markers on two routes" width="180">                                      | Route lines and served stop points in a single collection.                                                                                               |
+| [`route-buffers`](examples/gallery/route-buffers.geojson)<br>Polygon or MultiPolygon   | <img src="examples/gallery/route-buffers.svg" alt="Two overlapping corridor polygons" width="180">                             | One 400-meter buffer per route. Overlapping routes retain separate polygons.                                                                             |
+| [`route-coverage`](examples/gallery/route-coverage.geojson)<br>Polygon or MultiPolygon | <img src="examples/gallery/route-coverage.svg" alt="Continuous coverage around both routes" width="180">                       | Route buffers dissolved into one feature per group. The shared corridor has one boundary.                                                                |
+| [`stop-buffers`](examples/gallery/stop-buffers.geojson)<br>Polygon or MultiPolygon     | <img src="examples/gallery/stop-buffers.svg" alt="Six circles with overlapping boundaries near the junction" width="180">      | One 400-meter buffer per stop. Nearby stops have overlapping circles.                                                                                    |
+| [`stop-coverage`](examples/gallery/stop-coverage.geojson)<br>Polygon or MultiPolygon   | <img src="examples/gallery/stop-coverage.svg" alt="Joined circles at the junction and isolated patches elsewhere" width="180"> | Stop buffers dissolved into one feature per group. Nearby circles merge and isolated areas remain separate parts.                                        |
+| [`bounding-box`](examples/gallery/bounding-box.geojson)<br>Polygon                     | <img src="examples/gallery/bounding-box.svg" alt="A rectangle enclosing the network extent" width="180">                       | The smallest axis-aligned rectangle containing the route lines.                                                                                          |
+| [`convex-hull`](examples/gallery/convex-hull.geojson)<br>Polygon                       | <img src="examples/gallery/convex-hull.svg" alt="A polygon stretched between the outermost stops" width="180">                 | The smallest convex polygon enclosing the served stops. Its edges connect the outermost stops.                                                           |
+| [`service-areas`](examples/gallery/service-areas.geojson)<br>Polygon or MultiPolygon   | <img src="examples/gallery/service-areas.svg" alt="An irregular zone with a defined service boundary" width="180">             | A GTFS Flex zone supplied in <code>locations.geojson</code>. Grouped and date-filtered exports select zones through <code>stop_times.location_id</code>. |
+
+When a trip lacks usable shape geometry, route-line layers connect its ordered stop coordinates. Actual shape layers contain only shapes from the feed. Stop and shape metadata retain the serving-route list from node-GTFS, even when a filter selects fewer trips. Empty layers are valid empty FeatureCollections. A degenerate hull or bounding box emits a warning.
+
+## JavaScript and TypeScript
+
+```sh
+pnpm add gtfs-to-geojson
 ```
 
-- Specify a path to an unzipped GTFS file:
+<!-- prettier-ignore -->
+```js
+import { exportGeoJSON } from 'gtfs-to-geojson';
 
-```json
-{
-  "agencies": [
-    {
-      "agencyKey": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/"
-    }
-  ]
-}
+const { outputDirectory, files } = await exportGeoJSON({
+  sources: [{ sourceId: 'metro', schedule: { path: './gtfs.zip' } }],
+  export: { outputDirectory: './maps', layers: ['stop-coverage'] },
+});
+
+console.log(outputDirectory, files); // files includes metro/stop-coverage.geojson
 ```
 
-- Specify multiple agencies (each one will be imported and processed separately). See `config-sample-bayarea.json` for a working example of processing multiple agencies.
+The API returns `{ outputDirectory, files, archivePath? }` and rejects on failure. It is silent unless you pass a node-GTFS reporter in `reporting.reporter`. TypeScript callers can import `GeoJSONConfig`, `GeoJSONExportOptions`, `GroupBy` and `Layer`.
 
-```json
-{
-  "agencies": [
-    {
-      "agencyKey": "myAgency",
-      "path": "/path/to/the/gtfs.zip"
-    },
-    {
-      "agencyKey": "otherAgency",
-      "path": "/path/to/the/othergtfs.zip"
-    }
-  ]
-}
-```
+## Examples and development
 
-- Exclude files - if you don't want all GTFS files to be imported, you can specify an array of files to exclude.
+The [Caltrain examples](examples/caltrain) were generated from the April 2016 test feed. Compare the four route features with the eight raw shape features, or inspect the 64 stop buffers beside their single dissolved coverage feature. Regenerate the Caltrain examples and the layer gallery with `pnpm run examples` from a checkout.
 
-```json
-{
-  "agencies": [
-    {
-      "agencyKey": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/",
-      "exclude": ["shapes", "stops"]
-    }
-  ]
-}
-```
-
-Use WGS84 longitude and latitude for stop and shape coordinates. Convert projected feeds before importing.
-
-### bufferSizeMeters
-
-{Integer} Radius of buffers in meters. Optional, defaults to 400 meters (about 1/4 mile).
-
-```json
-"bufferSizeMeters": 400
-```
-
-### coordinatePrecision
-
-{Integer} The number of decimal places to include in the latitude and longitude of coordinates and geojson simplification. Omit to avoid any rounding which will result in larger file size and longer processing time. `5` is a reasonable value (about 1.1 meters).
-
-```json
-"coordinatePrecision": 5
-```
-
-### endDate
-
-{String} A date in YYYYMMDD format to use to filter service_ids in calendar.txt. Useful in combination with `startDate` configuration option. Optional, if not specified, all services in GTFS will be used.
-
-```
-    "endDate": "20240401"
-```
-
-### logLevel
-
-`logLevel` accepts `silent`, `error`, `warning`, or `info`. Errors and warnings
-use stderr; normal status output uses stdout.
-
-`verbose` remains available for compatibility. Use `logLevel` in new code.
-
-### outputType
-
-{String} The grouping of the output. Options are "agency", "route" and "shape". Optional, defaults to `agency`.
-
-| outputType | Description                                                                    |
-| ---------- | ------------------------------------------------------------------------------ |
-| `agency`   | Output one geoJSON file with all routes for a single agency combined together. |
-| `route`    | Output one geoJSON file per route and direction.                               |
-| `shape`    | Output one geoJSON file per shape_id.                                          |
-
-```json
-"outputType": "agency"
-```
-
-### outputFormat
-
-{String} The format of the output. Options are "envelope", "convex", "stops", "stops-buffer", "stops-dissolved", "lines", "lines-buffer", "lines-dissolved" and "lines-and-stops". Optional, defaults to "lines-and-stops".
-
-Only stops which are used in one or more routes will be output in geoJSON.
-
-| Format            | Type                        | Description                                 | Example                                                                                                                   | geoJSON                                                                                                                |
-| ----------------- | --------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `envelope`        | Polygon                     | A rectangular box around route lines.       | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/envelope.png">        | [envelope.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/envelope.geojson)               |
-| `convex`          | Polygon                     | A convex polygon around route endpoints.    | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/convex.png">          | [convex.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/convex.geojson)                   |
-| `stops`           | Points                      | Stops as points.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops.png">           | [stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops.geojson)                     |
-| `stops-buffer`    | Polygons                    | A buffer around stops.                      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops-buffer.png">    | [stops-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops-buffer.geojson)       |
-| `stops-dissolved` | Polygons                    | A dissolved buffer around stops.            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/stops-dissolved.png"> | [stops-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/stops-dissolved.geojson) |
-| `lines`           | MultiLineStrings            | Routes as lines.                            | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines.png">           | [lines.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines.geojson)                     |
-| `lines-buffer`    | Polygons                    | A buffer around route lines.                | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-buffer.png">    | [lines-buffer.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-buffer.geojson)       |
-| `lines-dissolved` | Polygons                    | A dissolved buffer around route lines.      | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-dissolved.png"> | [lines-dissolved.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-dissolved.geojson) |
-| `lines-and-stops` | Points and MultiLineStrings | Both points and lines for stops and routes. | <img width="300" src="https://raw.githubusercontent.com/BlinkTagInc/gtfs-to-geojson/main/examples/lines-and-stops.png"> | [lines-and-stops.geojson](https://github.com/BlinkTagInc/gtfs-to-geojson/blob/main/examples/lines-and-stops.geojson) |
-
-```
-    "outputFormat": "lines-and-stops"
-```
-
-### sqlitePath
-
-When upgrading to node-GTFS v5, choose a fresh SQLite path and import your original feeds once before using `--skipImport`. Keep the v4 file for rollback. Each agency’s `agencyKey` identifies its feed across imports.
-
-{String} A path to an SQLite database. Optional, defaults to using an in-memory database with a value of `:memory:`. If you want the data imported to persist, you need to specify a value for `sqlitePath`. Supports tilde as part of the path, like `~/Downloads/gtfs`.
-
-```
-    "sqlitePath": "/tmp/gtfs"
-```
-
-### startDate
-
-{String} A date in YYYYMMDD format to use to filter service_ids in calendar.txt. Useful in combination with `endDate` configuration option. Optional, if not specified, all services in GTFS will be used.
-
-```
-    "startDate": "20240301"
-```
-
-### zipOutput
-
-{Boolean} Whether or not to zip the output into one zip file named `geojson.zip`. Defaults to `false`.
-
-```
-    "zipOutput": false
-```
-
-## Running
-
-To generate geoJSON, run `gtfs-to-geojson`.
-
-    gtfs-to-geojson
-
-By default, `gtfs-to-geojson` will look for a `config.json` file in the project root. To specify a different path for the configuration file:
-
-    gtfs-to-geojson --configPath /path/to/your/custom-config.json
-
-This will download the GTFS file specified in `config.js` . Then, `gtfs-to-geojson` will create geoJSON and save it to `geojson/:agencyKey`.
-
-### Options
-
-`configPath`
-
-    gtfs-to-geojson --configPath /path/to/your/custom-config.json
-
-`skipImport`
-
-Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged GTFS file. If you use this option and the GTFS file hasn't been imported or you don't have an `sqlitePath` to a non-in-memory database, you'll get an error.
-
-    gtfs-to-geojson --skipImport
-
-## Processing very large GTFS files
-
-By default, node has a memory limit of 512 MB or 1 GB. If you have a very large GTFS file, use the `max-old-space-size` option. For example to allocate 12 GB:
-
-    export NODE_OPTIONS="--max-old-space-size=30000"
-    gtfs-to-geojson
-
-### Credits
-
-Ideas for including buffers, envelopes and convex service-area polygons came from [gtfs-service-area](https://github.com/cal-itp/gtfs-service-area).
-
-## Contributing
-
-Pull requests are welcome, as is feedback and [reporting issues](https://github.com/blinktaginc/gtfs-to-geojson/issues).
+[SFMTA benchmark](docs/performance.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [MIT license](LICENSE.txt)

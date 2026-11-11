@@ -1,0 +1,12 @@
+trip_id,stop_sequence,stop_id,arrival_time,departure_time,location_id,start_pickup_drop_off_window,end_pickup_drop_off_window
+A1,1,west,08:05:00,08:05:00,,,
+A1,2,junction,08:10:00,08:10:00,,,
+A1,3,north,08:15:00,08:15:00,,,
+A2,1,west,08:05:00,08:05:00,,,
+A2,2,junction,08:10:00,08:10:00,,,
+A2,3,transfer,08:15:00,08:15:00,,,
+A2,4,east,08:20:00,08:20:00,,,
+B1,1,south,08:05:00,08:05:00,,,
+B1,2,transfer,08:10:00,08:10:00,,,
+B1,3,east,08:15:00,08:15:00,,,
+flex,1,,,,zone,08:00:00,18:00:00
