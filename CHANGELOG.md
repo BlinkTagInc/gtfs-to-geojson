@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Require Node.js 24.22.3 or later.
 
+### Updated
+
+- Dependency updates
+
 ## [4.0.0] - 2026-11-11
 
 - Adopt node-GTFS v5 configuration, reporting, package entry points and CLI conventions. See the [v4 migration guide](docs/migrating-to-v4.md).
