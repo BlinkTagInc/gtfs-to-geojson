@@ -81,7 +81,7 @@
     "@arethetypeswrong/core": "^0.18.5"
   },
   "engines": {
-    "node": "^22.18.0 || >=24.0.0"
+    "node": ">=24.22.3"
   },
   "release-it": {
     "git": {

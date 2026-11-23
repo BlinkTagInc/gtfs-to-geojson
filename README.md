@@ -10,7 +10,7 @@ Export a GTFS Schedule feed as GeoJSON layers for QGIS, web maps and spatial ana
 
 ## Quick start
 
-Use Node.js 22.18+ on the 22.x line, or Node.js 24+. These examples use a local GTFS zip. An extracted feed directory also works.
+Use Node.js 24.22.3 or later. These examples use a local GTFS zip. An extracted feed directory also works.
 
 ```sh
 npx gtfs-to-geojson --input ./gtfs.zip --source-id metro

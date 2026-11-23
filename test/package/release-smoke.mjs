@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, rm, symlink, readFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,18 +27,11 @@ test('packed ESM entry, types, CLI and samples', async (t) => {
   );
   const [pack] = Object.values(packed);
   const installed = path.join(temp, 'node_modules', 'gtfs-to-geojson');
-  await mkdir(installed, { recursive: true });
-  execFileSync('tar', [
-    '-xzf',
-    path.join(temp, pack.filename),
-    '--strip-components=1',
-    '-C',
-    installed,
-  ]);
-  await symlink(
-    path.join(root, 'node_modules'),
-    path.join(installed, 'node_modules'),
-    'dir',
+  await writeFile(path.join(temp, 'package.json'), '{"private":true}');
+  execFileSync(
+    'npm',
+    ['install', '--engine-strict', '--no-audit', '--no-fund', pack.filename],
+    { cwd: temp, stdio: 'inherit' },
   );
   for (const file of [
     'LICENSE.txt',
@@ -54,11 +47,11 @@ test('packed ESM entry, types, CLI and samples', async (t) => {
     [
       '--input-type=module',
       '-e',
-      "import {exportGeoJSON} from 'gtfs-to-geojson';if(typeof exportGeoJSON!=='function')process.exit(1)",
+      "import assert from 'node:assert/strict'; import { exportGeoJSON } from 'gtfs-to-geojson'; assert.equal(typeof exportGeoJSON, 'function');",
     ],
     { cwd: temp },
   );
-  const cli = path.join(installed, 'dist/bin/gtfs-to-geojson.js');
+  const cli = path.join(temp, 'node_modules/.bin/gtfs-to-geojson');
   assert.equal(
     execFileSync(process.execPath, [cli, '-v'], { encoding: 'utf8' }).trim(),
     pack.version,
